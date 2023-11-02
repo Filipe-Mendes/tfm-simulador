@@ -1,0 +1,18 @@
+comma2point_overwrite('log_position.txt');
+comma2point_overwrite('log_acceleration.txt');
+comma2point_overwrite('log_velocity.txt');
+comma2point_overwrite('log_rotation.txt');
+
+position = load('log_position.txt');
+acceleration = load('log_acceleration.txt');
+velocity = load('log_velocity.txt');
+rotation = load('log_rotation.txt');
+
+
+subplot(3,1,1);
+plot(A(:,1),A(:,2))
+
+subplot(3,1,2); 
+plot(A(:,1),A(:,2))
+
+
