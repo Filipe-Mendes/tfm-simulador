@@ -1,0 +1,8 @@
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\bin\Debug\PlatformController.exe.config
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\bin\Debug\PlatformController.exe
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\bin\Debug\PlatformController.pdb
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\obj\Debug\PlatformController.csproj.AssemblyReference.cache
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\obj\Debug\PlatformController.csproj.SuggestedBindingRedirects.cache
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\obj\Debug\PlatformController.csproj.CoreCompileInputs.cache
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\obj\Debug\PlatformController.exe
+C:\Users\filip\Documents\ISEL\TFM\MATLAB\PlatformController\obj\Debug\PlatformController.pdb
