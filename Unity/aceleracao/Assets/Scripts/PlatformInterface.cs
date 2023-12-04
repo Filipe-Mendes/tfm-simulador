@@ -13,8 +13,8 @@ public class PlatformInterface: MonoBehaviour
     // [SerializeField] private bool toConnect = true;
     private TcpClient client;
     private NetworkStream ns;
-    private StreamReader reader;
-    [SerializeField] private string IP = "127.0.0.1";
+    // private StreamReader reader;
+    [SerializeField] private string IP = "127.0.0.1";   //TODO: NAO ESTAR HARDCODED? UI?
     [SerializeField] private int PORT = 55001;
     // private IPAddress ipAddr = IPAddress.Parse(IP);
 
@@ -28,7 +28,7 @@ public class PlatformInterface: MonoBehaviour
         {
             client.Connect(IP, PORT);
             ns = client.GetStream();
-            reader = new StreamReader(ns);
+            // reader = new StreamReader(ns);
             connected = true;
             Debug.Log("Connected");
         }

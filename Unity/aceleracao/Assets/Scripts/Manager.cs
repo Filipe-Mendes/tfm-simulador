@@ -2,22 +2,26 @@ using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
-    
+    // UI
+    [SerializeField] private bool showUI = true;
+    [SerializeField] GameObject canvasUI;
+    [HideInInspector] public bool startPressed = false;
+
     // Mode configuration
-    [SerializeField] private INPUT_DEVICE inputDevice = INPUT_DEVICE.JOYSTICK;
-    [SerializeField] private MODE mode = MODE.VR;
+    [SerializeField] public INPUT_DEVICE inputDevice = INPUT_DEVICE.JOYSTICK;
+    [SerializeField] public MODE mode = MODE.VR;
     [SerializeField] private GameObject mainCamera;
     [SerializeField] private GameObject sideCamera;
     [SerializeField] private GameObject vrRig;
 
     // Scene mode
     [SerializeField] private GameObject handsVisualizer;
-    [SerializeField] private DRIVING_MODE drivingMode = DRIVING_MODE.FREE;
+    [SerializeField] public DRIVING_MODE drivingMode = DRIVING_MODE.FREE;
     [SerializeField] private GameObject speedBumps;
 
     // Logger
-    [SerializeField] private bool toLog = false;
-    [SerializeField] private bool toConnect = false;
+    [SerializeField] public bool toLog = false;
+    [SerializeField] public bool toConnect = false;
     private bool triedConnection = false;
     private bool connected = false;
     [SerializeField] private GameObject loggerObject;
@@ -25,7 +29,7 @@ public class Manager : MonoBehaviour
 
     // Calibrators
     [SerializeField] private GameObject calibratorObject;
-    [SerializeField] private bool toCalibrate = false;
+    [SerializeField] public bool toCalibrate = false;
     private bool calibrated = false;
     private SteeringWheelCalibrator steeringWheelCalibrator;
 
@@ -33,13 +37,23 @@ public class Manager : MonoBehaviour
     [SerializeField] private GameObject vehicleControllerObject;
     private VehicleController vehicleController;
 
-
     private bool ready = false;
     private bool readySent = false;
+    private bool setUpFinished = false;
 
 
     void Start()
     {
+        if(!showUI){
+            canvasUI.SetActive(false);
+            SetUpScene();
+        } else {
+            canvasUI.SetActive(true);
+        }
+    }
+
+    void SetUpScene(){
+        Debug.Log("Set up scene on Manager");
         // Mode
         switch (mode){
             case MODE.SCREEN:
@@ -58,7 +72,7 @@ public class Manager : MonoBehaviour
         vehicleController = vehicleControllerObject.GetComponent<VehicleController>();
         if(drivingMode != DRIVING_MODE.FREE) handsVisualizer.SetActive(false);
 
-        // activate objects like speed bumps etc
+        // Activate objects like speed bumps etc
         switch (drivingMode){
             case DRIVING_MODE.SPEED_BUMP:
                 speedBumps.SetActive(true);
@@ -69,7 +83,7 @@ public class Manager : MonoBehaviour
         if(toCalibrate) {
             calibratorObject.SetActive(true);
             steeringWheelCalibrator = calibratorObject.GetComponent<SteeringWheelCalibrator>();
-            steeringWheelCalibrator.toCalibrate = toCalibrate;
+            steeringWheelCalibrator.toCalibrate = toCalibrate;  //TODO: PASSAR PARA ANTES DA ATIVAÇAO
         }
 
         // Logger
@@ -78,12 +92,17 @@ public class Manager : MonoBehaviour
             logger = loggerObject.GetComponent<Logger>();
         }
 
-
+        setUpFinished = true;
     }
 
     void Update()
     {
-        if(!ready){
+        if (showUI && startPressed && !setUpFinished){
+            SetUpScene();
+            // startPressed = true;
+        }
+
+        if(!ready && setUpFinished){
             if(toCalibrate) calibrated = steeringWheelCalibrator.IsCalibrated();
 
 
@@ -94,12 +113,13 @@ public class Manager : MonoBehaviour
                     triedConnection = true;
                 }
                 connected = logger.IsConnected();
+                if (!connected) Debug.Log("Error! Could not connect to platform!");
             }
 
-            ready = (( (toCalibrate && calibrated) || !toCalibrate ) && ( (toConnect && connected) || !toConnect ));
+            ready = ( (toCalibrate && calibrated) || !toCalibrate ) && ( (toConnect && connected) || !toConnect );
         }
         
-        if(ready && !readySent){
+        if(ready && !readySent && setUpFinished){
             // send mode to vehicleController
             vehicleController.SetUpVehicle(drivingMode, inputDevice);
             readySent = true;

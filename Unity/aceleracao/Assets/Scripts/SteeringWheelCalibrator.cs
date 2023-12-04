@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Hands;
@@ -8,7 +9,10 @@ public class SteeringWheelCalibrator : MonoBehaviour
 
 /*     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB; */
+    [SerializeField] private bool mockCalibration = false;
 
+    [SerializeField] private GameObject canvas;
+    [SerializeField] private TMPro.TMP_Text timerText;
 
     [SerializeField] private Transform XROrigin;
     [SerializeField] private Transform mainCamera;
@@ -31,38 +35,65 @@ public class SteeringWheelCalibrator : MonoBehaviour
     {   
         Debug.Log("Steeing wheel calibrator start start");
         if(toCalibrate) {
-            var handSubsystems = new List<XRHandSubsystem>();
-            SubsystemManager.GetSubsystems(handSubsystems);
+            canvas.SetActive(true);
+            
+            if(!mockCalibration){
+                var handSubsystems = new List<XRHandSubsystem>();
+                SubsystemManager.GetSubsystems(handSubsystems);
 
-            for (var i = 0; i < handSubsystems.Count; ++i)
-            {   
-                var handSubsystem = handSubsystems[i];
-                temp_m_HandSubsystem = handSubsystem;
+                for (var i = 0; i < handSubsystems.Count; ++i)
+                {   
+                    var handSubsystem = handSubsystems[i];
+                    temp_m_HandSubsystem = handSubsystem;
+                }
             }
-            Debug.Log("steering wheel activate");
-            steeringWheel.SetActive(true);
+
+            // Debug.Log("steering wheel activate");
+            // steeringWheel.SetActive(true);
         }
         Debug.Log("Steeing wheel calibrator start end");
     }
 
-    //TODO: CLEANUP
     void FixedUpdate()
+    {   
+
+        while (!calibrated){
+            if( timeToCalibrate >= 0 ){
+                timeToCalibrate -= Time.deltaTime;
+                Debug.Log("time remaining: " + timeToCalibrate);
+                timerText.text = ""+(int)Math.Ceiling(timeToCalibrate);
+                break;
+            } else {
+                canvas.SetActive(false);
+
+                calibrated = true;
+            }
+        }
+        
+    }
+
+    //TODO: CLEANUP
+    void FixedUpdate_actual()
     {   
         if (toCalibrate && !running && temp_m_HandSubsystem.running)
         {
-            m_HandSubsystem = temp_m_HandSubsystem;
-            Debug.Log("Running Hand System");
+            if(!mockCalibration){
+                m_HandSubsystem = temp_m_HandSubsystem;
+                Debug.Log("Running Hand System");
+            }
             running = true;
         }
-        // running = true;
 
         if(running){
             while (!calibrated){
                 if( timeToCalibrate >= 0 ){
                     timeToCalibrate -= Time.deltaTime;
                     Debug.Log("time remaining: " + timeToCalibrate);
+                    timerText.text = ""+(int)Math.Ceiling(timeToCalibrate);
                     break;
                 } else {
+                    canvas.SetActive(false);
+                    
                     // Timer ended, calibrate wheel
                     leftHand = m_HandSubsystem.leftHand;
                     rightHand = m_HandSubsystem.rightHand;
@@ -181,8 +212,8 @@ public class SteeringWheelCalibrator : MonoBehaviour
 
     public void NewScale(GameObject theGameObject, float newSize) {
 
-        float sizey = theGameObject.GetComponent<Renderer> ().bounds.size.y;
-        float sizez = theGameObject.GetComponent<Renderer> ().bounds.size.z;
+        float sizey = theGameObject.GetComponent<Renderer>().bounds.size.y;
+        float sizez = theGameObject.GetComponent<Renderer>().bounds.size.z;
 
         Vector3 rescale = theGameObject.transform.localScale;
 
