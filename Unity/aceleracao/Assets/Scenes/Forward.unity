@@ -2073,7 +2073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!20 &197243940
 Camera:
   m_ObjectHideFlags: 0
@@ -2153,6 +2153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicle: {fileID: 1781917499}
+  offset: {x: -6, y: 0.6, z: 0.3}
 --- !u!1 &216456224
 GameObject:
   m_ObjectHideFlags: 0
@@ -5427,6 +5428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicle: {fileID: 1781917499}
+  offset: {x: 0, y: 10, z: -15}
 --- !u!1 &979665939
 GameObject:
   m_ObjectHideFlags: 0

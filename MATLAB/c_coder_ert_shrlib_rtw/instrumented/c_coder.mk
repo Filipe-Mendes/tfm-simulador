@@ -2,7 +2,7 @@
 ## Makefile generated for component 'c_coder'. 
 ## 
 ## Makefile     : c_coder.mk
-## Generated on : Tue Nov 28 20:15:43 2023
+## Generated on : Wed Dec 06 04:17:32 2023
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/c_coder_win64.dll
 ## Product type : shared library
 ## 
@@ -24,7 +24,7 @@ MAKEFILE                  = c_coder.mk
 MATLAB_ROOT               = C:/PROGRA~1/MATLAB/R2021b
 MATLAB_BIN                = C:/PROGRA~1/MATLAB/R2021b/bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)/win64
-START_DIR                 = C:/Users/filip/Documents/ISEL/TFM/MATLAB
+START_DIR                 = C:/Users/filip/Documents/ISEL/TFM/Repositorio/tfm-simulador/MATLAB
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 0

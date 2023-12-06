@@ -52,8 +52,6 @@ public class PlatformController
         if(args.Length < 4)
         {
             Console.WriteLine("Using default parameters:");
-            Console.WriteLine("Listening on: {0}:{1}", serverIP, serverPort);
-            Console.WriteLine("Connected to: {0}:{1}", clientIP, clientPort);
         }
 
         if (args.Length >= 4)
@@ -65,10 +63,20 @@ public class PlatformController
             clientPort = int.Parse(args[3]);
         }
 
-        if (args.Length == 5 && args[4].Equals("mock"))
+        Console.WriteLine("Listening on: {0}:{1}", serverIP, serverPort);
+        Console.WriteLine("Connected to: {0}:{1}", clientIP, clientPort);
+
+        if (args.Length == 5)
         {
-            Console.WriteLine("Simulating connection to Stewart Platform");
-            mockConnection = true;
+            if (args[4].Equals("mock"))
+            {
+                Console.WriteLine("Simulating connection to Stewart Platform");
+                mockConnection = true;
+            } else
+            {
+                Console.WriteLine("Argument not recognized.");
+                Environment.Exit(1);
+            }
         }
 
 

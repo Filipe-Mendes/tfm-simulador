@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: aceleracao_vr
+  productName: aceleracao
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -138,9 +138,6 @@ PlayerSettings:
   bundleVersion: 0.1
   preloadedAssets:
   - {fileID: 11400000, guid: 71de0c5e31ceb96409e836d8c4aea433, type: 2}
-  - {fileID: -870736598794869319, guid: 37ce93a4f12c0404e8f5594f31ca8fcd, type: 2}
-  - {fileID: 11400000, guid: 672872b7e90284b46870128309beb253, type: 2}
-  - {fileID: 1975777847500165896, guid: c7a04115803f5ee4e8459d7f192b0d3b, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
