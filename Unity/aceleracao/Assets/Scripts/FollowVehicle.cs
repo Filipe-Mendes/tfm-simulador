@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class FollowVehicle : MonoBehaviour
 {
-    // Start is called before the first frame update
-public GameObject vehicle;
+    [SerializeField] private GameObject vehicle;
 
     [SerializeField] private Vector3 offset = new Vector3(0,10,-15);
 
@@ -17,5 +16,7 @@ public GameObject vehicle;
     void LateUpdate()
     {
         transform.position = vehicle.transform.position + offset;
+        transform.rotation = vehicle.transform.rotation;
+
     }
 }

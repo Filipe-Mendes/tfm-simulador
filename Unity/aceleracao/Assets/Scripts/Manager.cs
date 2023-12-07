@@ -17,7 +17,13 @@ public class Manager : MonoBehaviour
     // Scene mode
     [SerializeField] private GameObject handsVisualizer;
     [SerializeField] public DRIVING_MODE drivingMode = DRIVING_MODE.FREE;
+    
+    // Environment
+    [SerializeField] private GameObject freeRideEnvironment;
+    [SerializeField] private GameObject testingEnvironment;
     [SerializeField] private GameObject speedBumps;
+    [SerializeField] private GameObject wall;
+    [SerializeField] private GameObject curb;
 
     // Logger
     [SerializeField] public bool toLog = false;
@@ -73,9 +79,23 @@ public class Manager : MonoBehaviour
         if(drivingMode != DRIVING_MODE.FREE) handsVisualizer.SetActive(false);
 
         // Activate objects like speed bumps etc
+        if(drivingMode == DRIVING_MODE.FREE){
+            freeRideEnvironment.SetActive(true);
+            testingEnvironment.SetActive(false);
+        } else {
+            freeRideEnvironment.SetActive(false);
+            testingEnvironment.SetActive(true);
+        }
+
         switch (drivingMode){
             case DRIVING_MODE.SPEED_BUMP:
                 speedBumps.SetActive(true);
+                break;
+            case DRIVING_MODE.COLLISION:
+                wall.SetActive(true);
+                break;
+            case DRIVING_MODE.SIDE_TILT:
+                curb.SetActive(true);
                 break;
         }
 

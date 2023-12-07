@@ -224,7 +224,7 @@ public class VehicleController : MonoBehaviour
         // HARDCODED MOVEMENT
 
         // STRAIGHT LINE
-        if (mode == DRIVING_MODE.STRAIGHT_LINE)
+        if (mode == DRIVING_MODE.STRAIGHT_LINE || mode == DRIVING_MODE.COLLISION || mode == DRIVING_MODE.SIDE_TILT)
         {
             acceleratorInput = 1;
             if (rb.transform.position.z > hardcodedStoppingPoint)

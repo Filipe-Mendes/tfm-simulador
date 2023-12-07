@@ -4,5 +4,7 @@ public enum DRIVING_MODE
     STRAIGHT_LINE,
     SPEED_BUMP,
     CURVE,
-    REVERSE
+    REVERSE,
+    SIDE_TILT,
+    COLLISION
 };

@@ -54,7 +54,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
         Debug.Log("Steeing wheel calibrator start end");
     }
 
-    void FixedUpdate()
+    void FixedUpdate_mocktest()
     {   
 
         while (!calibrated){
@@ -73,7 +73,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
     }
 
     //TODO: CLEANUP
-    void FixedUpdate_actual()
+    void FixedUpdate()
     {   
         if (toCalibrate && !running && temp_m_HandSubsystem.running)
         {
