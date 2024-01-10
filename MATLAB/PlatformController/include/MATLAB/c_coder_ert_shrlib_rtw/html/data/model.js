@@ -1,0 +1,1 @@
+var modelInfo = {model:"c_coder"};var modelHierarchy=[{model:"c_coder",relativePath:"_internal.html",parent:"null"},];
