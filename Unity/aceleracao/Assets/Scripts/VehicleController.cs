@@ -104,11 +104,8 @@ public class VehicleController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMass.transform.position;
         reverseMotorForce = motorForce / 5;
-        // lastVelocity = transform.InverseTransformDirection(rb.velocity);
 
-        // timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-
-
+        // Configure Input
         userInput = GetComponent<PlayerInput>();
         userInput.neverAutoSwitchControlSchemes = true;
         
@@ -118,7 +115,6 @@ public class VehicleController : MonoBehaviour
         clutchAction = userInput.actions["Clutch"];
         reverseAction = userInput.actions["Reverse"];
 
-        // ip_text.text = "";
     }
 
     public void SetUpVehicle(DRIVING_MODE dm, INPUT_DEVICE ind){
@@ -183,7 +179,6 @@ public class VehicleController : MonoBehaviour
                 }
             }
         }
-
     }
 
 
@@ -201,21 +196,16 @@ public class VehicleController : MonoBehaviour
         steerInput = steerAction.ReadValue<float>();
         if(previousSteerInput == -2) previousSteerInput = steerInput; 
 
-/*         if (inputDevice == INPUT_DEVICE.JOYSTICK){
-            acceleratorInput = (acceleratorInput + 1)/2;
-            brakeInput = (brakeInput + 1)/2;
-        } */
         ip_text.text = "";
         ip_text.text += userInput.currentControlScheme + "\nsteer: " + steerInput + "\naccelerator: " + acceleratorInput + "\nbrake: " + brakeInput  + "\nclutch: " + clutchAction.ReadValue<float>() + "\nreverse: " + reverseAction.ReadValue<float>();
 
         // Putting the car in reverse
-        //TODO: REVERSE
-        /* if (Math.Abs(acceleration.z) < 1 && Math.Abs(lastVelocity.z) < 1)
+        if (Math.Abs((int)rb.velocity.magnitude) < 1)
         {
             // if (reverseAction.ReadValue<float>() == 1) reverse = !reverse;
             if (reverseAction.ReadValue<float>() == 1) reverse = true;
             else reverse = false;
-        }    */
+        }   
     }
     
 
@@ -375,4 +365,5 @@ public class VehicleController : MonoBehaviour
         wheelTransform.position = pos;
     }
 
+    public bool IsReverse(){ return reverse; }
 }

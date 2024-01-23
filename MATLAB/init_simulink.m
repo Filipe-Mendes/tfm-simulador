@@ -1,3 +1,5 @@
+%global f0_lp w0_lp qsi f0_acc w0_acc f0_vel w0_vel f0_pos w0_pos;
+
 % low pass filter ordem 2
 f0_lp = 1;
 w0_lp = 2*pi*f0_lp;

@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.114
+ * Model version                  : 8.134
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Tue Jan  9 20:32:58 2024
+ * C/C++ source code generated on : Tue Jan 23 05:04:06 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -58,17 +58,13 @@
 #endif
 
 /* user code (top of header file) */
-extern void get_out1(uint8_T* resultArray);
-extern int get_out2(int idk);
-extern void get_out3();
 extern void wrapper_c_coder_step(RT_MODEL_c_coder_T *const c_coder_M,
   real_T c_coder_U_Inport,
   real_T c_coder_U_Inport1,
   real_T c_coder_U_Inport2,
   real_T c_coder_U_Inport3,
   real_T c_coder_U_Inport4,
-  real_T c_coder_U_Inport5,
-  uint8_T out[25]);
+  real_T c_coder_U_Inport5);
 extern void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const c_coder_M,
   real_T c_coder_U_Inport,
   real_T c_coder_U_Inport1,
@@ -297,8 +293,6 @@ typedef struct {
   const real_T Gain4;                  /* '<Root>/Gain4' */
   const real_T Saturation;             /* '<Root>/Saturation' */
   const real_T Product5;               /* '<S10>/Product5' */
-  const real_T Constant3;              /* '<Root>/Constant3' */
-  const real_T Constant4;              /* '<Root>/Constant4' */
   const uint8_T DataTypeConversion;    /* '<S5>/Data Type Conversion' */
   const uint8_T DataTypeConversion1;   /* '<S5>/Data Type Conversion1' */
   const uint8_T DataTypeConversion11;  /* '<S5>/Data Type Conversion11' */

@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.114
+ * Model version                  : 8.134
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Tue Jan  9 20:32:58 2024
+ * C/C++ source code generated on : Tue Jan 23 05:04:06 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -19,21 +19,6 @@
 /* user code (top of source file) */
 #include <stdint.h>
 
-__declspec(dllexport) void get_out1(uint8_T* resultArray)
-{
-  memcpy(resultArray, out1, 25 * sizeof(uint8_T));
-}
-
-__declspec(dllexport) int get_out2(int idk)
-{
-  int res = idk +1;
-  return res;
-}
-
-__declspec(dllexport) void get_out3()
-{
-}
-
 __declspec(dllexport) void wrapper_c_coder_step(RT_MODEL_c_coder_T *const
   c_coder_M,
   real_T c_coder_U_Inport,
@@ -41,14 +26,10 @@ __declspec(dllexport) void wrapper_c_coder_step(RT_MODEL_c_coder_T *const
   real_T c_coder_U_Inport2,
   real_T c_coder_U_Inport3,
   real_T c_coder_U_Inport4,
-  real_T c_coder_U_Inport5,
-  uint8_T out[25])
+  real_T c_coder_U_Inport5)
 {
-  printf("inside matlab step");
   c_coder_step(c_coder_M, c_coder_U_Inport, c_coder_U_Inport1, c_coder_U_Inport2,
                c_coder_U_Inport3, c_coder_U_Inport4, c_coder_U_Inport5);
-  printf("inside matlab after step");
-  memcpy(out, out1, sizeof(uint8_T) * 25);
 }
 
 __declspec(dllexport) void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const
@@ -60,11 +41,9 @@ __declspec(dllexport) void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const
   real_T c_coder_U_Inport4,
   real_T c_coder_U_Inport5)
 {
-  printf("inside matlab init");
   c_coder_initialize(c_coder_M, &c_coder_U_Inport, &c_coder_U_Inport1,
                      &c_coder_U_Inport2, &c_coder_U_Inport3, &c_coder_U_Inport4,
                      &c_coder_U_Inport5);
-  printf("inside matlab after init");
 }
 
 /* Exported block signals */
@@ -1162,7 +1141,7 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* TransferFcn: '<Root>/Transfer Fcn7' */
     c_coder_B->accx_filt = 0.0;
-    c_coder_B->accx_filt += (-0.62831853071795862) *
+    c_coder_B->accx_filt += (-1.2566370614359172) *
       c_coder_X->TransferFcn7_CSTATE;
     c_coder_B->accx_filt += 1.0 * c_coder_B->Gain5;
 
@@ -1336,13 +1315,13 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* TransferFcn: '<Root>/Transfer Fcn4' */
     c_coder_B->TransferFcn4 = 0.0;
-    c_coder_B->TransferFcn4 += (-0.62831853071795862) *
+    c_coder_B->TransferFcn4 += (-1.2566370614359172) *
       c_coder_X->TransferFcn4_CSTATE;
     c_coder_B->TransferFcn4 += 1.0 * c_coder_B->Gain1;
 
     /* TransferFcn: '<Root>/Transfer Fcn5' */
     c_coder_B->TransferFcn5 = 0.0;
-    c_coder_B->TransferFcn5 += (-0.62831853071795862) *
+    c_coder_B->TransferFcn5 += (-1.2566370614359172) *
       c_coder_X->TransferFcn5_CSTATE;
     c_coder_B->TransferFcn5 += 1.0 * c_coder_B->Gain_i;
 
@@ -1511,7 +1490,7 @@ void c_coder_derivatives(RT_MODEL_c_coder_T *const c_coder_M)
 
   /* Derivatives for TransferFcn: '<Root>/Transfer Fcn7' */
   _rtXdot->TransferFcn7_CSTATE = 0.0;
-  _rtXdot->TransferFcn7_CSTATE += (-0.62831853071795862) *
+  _rtXdot->TransferFcn7_CSTATE += (-1.2566370614359172) *
     c_coder_X->TransferFcn7_CSTATE;
   _rtXdot->TransferFcn7_CSTATE += c_coder_B->Gain5;
 
@@ -1539,13 +1518,13 @@ void c_coder_derivatives(RT_MODEL_c_coder_T *const c_coder_M)
 
   /* Derivatives for TransferFcn: '<Root>/Transfer Fcn4' */
   _rtXdot->TransferFcn4_CSTATE = 0.0;
-  _rtXdot->TransferFcn4_CSTATE += (-0.62831853071795862) *
+  _rtXdot->TransferFcn4_CSTATE += (-1.2566370614359172) *
     c_coder_X->TransferFcn4_CSTATE;
   _rtXdot->TransferFcn4_CSTATE += c_coder_B->Gain1;
 
   /* Derivatives for TransferFcn: '<Root>/Transfer Fcn5' */
   _rtXdot->TransferFcn5_CSTATE = 0.0;
-  _rtXdot->TransferFcn5_CSTATE += (-0.62831853071795862) *
+  _rtXdot->TransferFcn5_CSTATE += (-1.2566370614359172) *
     c_coder_X->TransferFcn5_CSTATE;
   _rtXdot->TransferFcn5_CSTATE += c_coder_B->Gain_i;
 

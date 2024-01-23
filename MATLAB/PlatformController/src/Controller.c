@@ -49,9 +49,9 @@ int main(int argc, char **argv) {
 
 
     // Printing the variables
-    printf("OPEN_PORT: %d\n", OPEN_PORT);
+    printf("OPEN_PORT: %s\n", OPEN_PORT);
     printf("PLATFORM_IP: %s\n", PLATFORM_IP);
-    printf("PLATFORM_PORT: %d\n", PLATFORM_PORT);
+    printf("PLATFORM_PORT: %s\n", PLATFORM_PORT);
     printf("MOCK: %s\n", MOCK ? "true" : "false");
 
     RT_MODEL_c_coder_T* const c_coder_M = c_coder_MPtr;
@@ -151,39 +151,41 @@ int main(int argc, char **argv) {
 
             // Resolve the server address and port
             int iResultc;
-            iResultc = getaddrinfo(PLATFORM_IP, PLATFORM_PORT, &hintsc, &resultc);
-            if (iResultc != 0) {
-                printf("getaddrinfo failed: %d\n", iResultc);
-                WSACleanup();
-                return 1;
-            }
-
             SOCKET ConnectSocket = INVALID_SOCKET;
-            // Attempt to connect to the first address returned by the call to getaddrinfo
-            ptrc = resultc;
 
-            // Create a SOCKET for connecting to server
-            ConnectSocket = socket(ptrc->ai_family, ptrc->ai_socktype, ptrc->ai_protocol);
-            if (ConnectSocket == INVALID_SOCKET) {
-                printf("Error at socket(): %d\n", WSAGetLastError());
+            if(!MOCK){
+
+                // Attempt to connect to the first address returned by the call to getaddrinfo
+                iResultc = getaddrinfo(PLATFORM_IP, PLATFORM_PORT, &hintsc, &resultc);
+                if (iResultc != 0) {
+                    printf("getaddrinfo failed: %d\n", iResultc);
+                    WSACleanup();
+                    return 1;
+                }
+                ptrc = resultc;
+                // Create a SOCKET for connecting to server
+                ConnectSocket = socket(ptrc->ai_family, ptrc->ai_socktype, ptrc->ai_protocol);
+                if (ConnectSocket == INVALID_SOCKET) {
+                    printf("Error at socket(): %d\n", WSAGetLastError());
+                    freeaddrinfo(resultc);
+                    WSACleanup();
+                    return 1;
+                }
+
+                //// Connecting to a Socket
+                // Connect to server.
+                iResultc = connect( ConnectSocket, ptrc->ai_addr, (int)ptrc->ai_addrlen);
+                if (iResultc == SOCKET_ERROR) {
+                    closesocket(ConnectSocket);
+                    ConnectSocket = INVALID_SOCKET;
+                }
                 freeaddrinfo(resultc);
-                WSACleanup();
-                return 1;
-            }
 
-            //// Connecting to a Socket
-            // Connect to server.
-            iResultc = connect( ConnectSocket, ptrc->ai_addr, (int)ptrc->ai_addrlen);
-            if (iResultc == SOCKET_ERROR) {
-                closesocket(ConnectSocket);
-                ConnectSocket = INVALID_SOCKET;
-            }
-            freeaddrinfo(resultc);
-
-            if (ConnectSocket == INVALID_SOCKET) {
-                printf("Unable to connect to server!\n");
-                WSACleanup();
-                return 1;
+                if (ConnectSocket == INVALID_SOCKET) {
+                    printf("Unable to connect to server!\n");
+                    WSACleanup();
+                    return 1;
+                }
             }
 
             //// Receiving and Sending Data on the Server
@@ -198,7 +200,7 @@ int main(int argc, char **argv) {
 
                 iResults = recv(ClientSocket, recvbuf, recvbuflen, 0);
                 if (iResults > 0) {
-                    printf("Bytes received: %d\n", iResults);
+                    printf("Bytes received: %d  | ", iResults);
 
 
                     memcpy(simValues, recvbuf, sizeof(simValues));
@@ -207,19 +209,22 @@ int main(int argc, char **argv) {
                     // LOOP DO SIMULINK
                     step(c_coder_M, simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5], output);
                     
-                    printf("Values of my_out1: ");
+                    printf("Output: ");
                     for (int i = 0; i < 25; ++i) {
-                        printf("%u ", output[i]);  // Assuming uint8_T is unsigned char
+                        printf("%u ", output[i]);
                     }
+                    printf("\n");
 
-                    iResults = send(ConnectSocket, recvbuf, recvbuflen, 0);
-                    if (iResults == SOCKET_ERROR) {
-                        printf("send failed: %d\n", WSAGetLastError());
-                        closesocket(ConnectSocket);
-                        WSACleanup();
-                        return 1;
+                    if(!MOCK){
+                        iResults = send(ConnectSocket, recvbuf, recvbuflen, 0);
+                        if (iResults == SOCKET_ERROR) {
+                            printf("send failed: %d\n", WSAGetLastError());
+                            closesocket(ConnectSocket);
+                            WSACleanup();
+                            return 1;
+                        }
+                        printf("Bytes sent: %d\n", iResults);
                     }
-                    printf("Bytes sent: %d\n", iResults);
 
 
                 } else if (iResults == 0)

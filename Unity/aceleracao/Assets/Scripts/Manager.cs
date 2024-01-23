@@ -1,10 +1,15 @@
 using UnityEngine;
+using System.Collections;
+using System;
+using System.Collections.Generic;
 
 public class Manager : MonoBehaviour
 {
     // UI
     [SerializeField] private bool showUI = true;
     [SerializeField] GameObject canvasUI;
+    [SerializeField] GameObject errorUI;
+    [SerializeField] private TMPro.TMP_Text errorMessage;
     [HideInInspector] public bool startPressed = false;
 
     // Mode configuration
@@ -133,7 +138,12 @@ public class Manager : MonoBehaviour
                     triedConnection = true;
                 }
                 connected = logger.IsConnected();
-                if (!connected) Debug.Log("Error! Could not connect to platform!");
+                if (!connected){
+                    Debug.Log("Error! Could not connect to platform!");
+                    errorUI.SetActive(true);
+                    errorMessage.text = "Error! Could not connect to platform! Restart the application.";
+
+                } 
             }
 
             ready = ( (toCalibrate && calibrated) || !toCalibrate ) && ( (toConnect && connected) || !toConnect );
