@@ -171,7 +171,7 @@ public class VehicleController : MonoBehaviour
                     HandleInput();
                 }
                 
-                if (mode == DRIVING_MODE.FREE || begin)
+                if (mode == DRIVING_MODE.FREE || begin) //TODO: VER SE BEGIN AINDA SE UTILIZA
                 {
                     HandleMotor();
                     HandleSteering();
