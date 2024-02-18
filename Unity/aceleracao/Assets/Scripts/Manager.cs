@@ -9,6 +9,7 @@ public class Manager : MonoBehaviour
     [SerializeField] private bool showUI = true;
     [SerializeField] GameObject canvasUI;
     [SerializeField] GameObject errorUI;
+    [SerializeField] GameObject driverUI;
     [SerializeField] private TMPro.TMP_Text errorMessage;
     [HideInInspector] public bool startPressed = false;
 
@@ -152,6 +153,7 @@ public class Manager : MonoBehaviour
         if(ready && !readySent && setUpFinished){
             // send mode to vehicleController
             vehicleController.SetUpVehicle(drivingMode, inputDevice);
+            driverUI.SetActive(true);
             readySent = true;
         }
 

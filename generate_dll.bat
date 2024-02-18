@@ -4,6 +4,10 @@ set matlabPath=%~dp0MATLAB
 
 cd %matlabPath%
 
+set clean=clean_folder.bat
+
+call %clean%
+
 matlab -batch build_model
 
 set zipFile=c_coder.zip
@@ -12,9 +16,6 @@ set unzipFolder=c_coder
 set bin=PlatformController\bin
 set include=PlatformController\include
 
-if exist %unzipFolder% (
-	del %unzipFolder%
-)
 
 mkdir %unzipFolder%
 xcopy %zipFile% %unzipFolder%
@@ -25,9 +26,10 @@ cd ..
 move %unzipFolder%\MATLAB\c_coder_win64.lib %bin%
 move %unzipFolder%\MATLAB\c_coder_win64.dll %bin%
 
-move %unzipFolder%\MATLAB %include%
+mkdir %include%\MATLAB
+Xcopy %unzipFolder%\MATLAB\*.* %include%\MATLAB /E /H /C /I /q
 
-move %unzipFolder%\R2021b\simulink\include\rtw_solver.h %include%\c_coder_ert_shrlib_rtw
-move %unzipFolder%\R2021b\simulink\include\rtw_continuous.h %include%\c_coder_ert_shrlib_rtw
+move %unzipFolder%\R2021b\simulink\include\rtw_solver.h %include%\MATLAB\c_coder_ert_shrlib_rtw
+move %unzipFolder%\R2021b\simulink\include\rtw_continuous.h %include%\MATLAB\c_coder_ert_shrlib_rtw
 
 cd ..

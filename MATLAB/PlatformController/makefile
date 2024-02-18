@@ -9,24 +9,16 @@
 # clean:
 # 	rm - f obj/PlatformController.o bin/PlatformController.exe
 
-# Define the compiler
 CC = gcc
 
-# Define directories
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
 DLL_DIR = bin
 INCLUDE_DIRS = -I/include/MATLAB/c_coder_ert_shrlib_rtw 
-#-I/include/R2021b/simulink/include
-
-# Define source and object files
-# SOURCE_FILE = $(SRC_DIR)/c_test.c
 
 
 SOURCE_FILE = $(SRC_DIR)/Controller.c
-
-
 OBJECT_FILE = $(OBJ_DIR)/PlatformController.o
 EXECUTABLE = $(BIN_DIR)/PlatformController.exe
 

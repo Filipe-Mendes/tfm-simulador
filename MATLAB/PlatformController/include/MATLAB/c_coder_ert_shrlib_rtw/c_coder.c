@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.114
+ * Model version                  : 8.145
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Tue Jan  9 20:32:58 2024
+ * C/C++ source code generated on : Wed Feb 14 05:36:51 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -19,21 +19,6 @@
 /* user code (top of source file) */
 #include <stdint.h>
 
-__declspec(dllexport) void get_out1(uint8_T* resultArray)
-{
-  memcpy(resultArray, out1, 25 * sizeof(uint8_T));
-}
-
-__declspec(dllexport) int get_out2(int idk)
-{
-  int res = idk +1;
-  return res;
-}
-
-__declspec(dllexport) void get_out3()
-{
-}
-
 __declspec(dllexport) void wrapper_c_coder_step(RT_MODEL_c_coder_T *const
   c_coder_M,
   real_T c_coder_U_Inport,
@@ -41,14 +26,19 @@ __declspec(dllexport) void wrapper_c_coder_step(RT_MODEL_c_coder_T *const
   real_T c_coder_U_Inport2,
   real_T c_coder_U_Inport3,
   real_T c_coder_U_Inport4,
-  real_T c_coder_U_Inport5,
-  uint8_T out[25])
+  real_T c_coder_U_Inport5)
 {
-  printf("inside matlab step");
+  //printf("INSIDE DLL BEFORE");
+  //for (int i = 0; i < 25; ++i) {
+  //    printf("%u ", out1[i]);
+  //}
   c_coder_step(c_coder_M, c_coder_U_Inport, c_coder_U_Inport1, c_coder_U_Inport2,
                c_coder_U_Inport3, c_coder_U_Inport4, c_coder_U_Inport5);
-  printf("inside matlab after step");
-  memcpy(out, out1, sizeof(uint8_T) * 25);
+
+  //printf("INSIDE DLL AFTER");
+  //for (int i = 0; i < 25; ++i) {
+  //    printf("%u ", out1[i]);
+  //}
 }
 
 __declspec(dllexport) void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const
@@ -60,11 +50,14 @@ __declspec(dllexport) void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const
   real_T c_coder_U_Inport4,
   real_T c_coder_U_Inport5)
 {
-  printf("inside matlab init");
   c_coder_initialize(c_coder_M, &c_coder_U_Inport, &c_coder_U_Inport1,
                      &c_coder_U_Inport2, &c_coder_U_Inport3, &c_coder_U_Inport4,
                      &c_coder_U_Inport5);
-  printf("inside matlab after init");
+}
+
+__declspec(dllexport) int *getOutput()
+{
+  return out1;
 }
 
 /* Exported block signals */

@@ -15,7 +15,11 @@
 
 #define DEFAULT_BUFLEN 24
 
-typedef void (*Dll_Step)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T, uint8_T[25]);
+typedef void (*Dll_Step)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T); 
+
+
+typedef int* (*Dll_GetOutput)(); 
+// typedef void (*Dll_Step)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T, uint8_T[25]);
 typedef void (*Dll_Initialize)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T);
 
 
@@ -64,6 +68,7 @@ int main(int argc, char **argv) {
     if (dllHandle != NULL) {
         Dll_Step step = (Dll_Step)GetProcAddress(dllHandle, "wrapper_c_coder_step");
         Dll_Initialize initialize = (Dll_Initialize)GetProcAddress(dllHandle, "wrapper_c_coder_initialize");
+        Dll_GetOutput getOutput = (Dll_GetOutput)GetProcAddress(dllHandle, "getOutput");
 
 
         if (initialize != NULL && step != NULL) {
@@ -205,13 +210,13 @@ int main(int argc, char **argv) {
 
                     memcpy(simValues, recvbuf, sizeof(simValues));
 
-
                     // LOOP DO SIMULINK
-                    step(c_coder_M, simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5], output);
+                    step(c_coder_M, simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
                     
+                    uint8_T *outp = getOutput();
                     printf("Output: ");
                     for (int i = 0; i < 25; ++i) {
-                        printf("%u ", output[i]);
+                        printf("%u ", outp[i]);
                     }
                     printf("\n");
 

@@ -53,7 +53,7 @@
             ],
             "bindings": [
                 {
-                    "name": "Keyboard",
+                    "name": "Arrows",
                     "id": "004d306d-992a-4764-9aa7-478b7ca1c4bf",
                     "path": "1DAxis",
                     "interactions": "",
@@ -86,7 +86,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "1D Axis",
+                    "name": "Steering Wheel",
                     "id": "e14edeff-f605-42ab-a1ea-395ad446e65d",
                     "path": "1DAxis",
                     "interactions": "",

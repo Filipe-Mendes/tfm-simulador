@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.132
+ * Model version                  : 8.145
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Tue Jan 23 03:23:04 2024
+ * C/C++ source code generated on : Wed Feb 14 05:36:51 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -72,6 +72,7 @@ extern void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const c_coder_M,
   real_T c_coder_U_Inport3,
   real_T c_coder_U_Inport4,
   real_T c_coder_U_Inport5);
+extern int *getOutput();
 
 /* Block signals (default storage) */
 typedef struct {
@@ -79,87 +80,87 @@ typedef struct {
   real_T Switch[3];                    /* '<Root>/Switch' */
   real_T Gain3;                        /* '<Root>/Gain3' */
   real_T Saturation2;                  /* '<Root>/Saturation2' */
-  real_T Product5;                     /* '<S9>/Product5' */
-  real_T TrigonometricFunction1;       /* '<S7>/Trigonometric Function1' */
-  real_T z;                            /* '<S7>/Product1' */
+  real_T Product5;                     /* '<S8>/Product5' */
+  real_T TrigonometricFunction1;       /* '<S6>/Trigonometric Function1' */
+  real_T z;                            /* '<S6>/Product1' */
   real_T Gain2;                        /* '<Root>/Gain2' */
   real_T Saturation1;                  /* '<Root>/Saturation1' */
-  real_T Product5_e;                   /* '<S10>/Product5' */
-  real_T TrigonometricFunction2;       /* '<S7>/Trigonometric Function2' */
-  real_T x;                            /* '<S7>/Product2' */
+  real_T Product5_e;                   /* '<S9>/Product5' */
+  real_T TrigonometricFunction2;       /* '<S6>/Trigonometric Function2' */
+  real_T x;                            /* '<S6>/Product2' */
   real_T posx;                         /* '<Root>/Discrete-Time Integrator5' */
   real_T TransferFcn13;                /* '<Root>/Transfer Fcn13' */
   real_T posx_filt;                    /* '<Root>/Saturation6' */
-  real_T Sum;                          /* '<S7>/Sum' */
-  real_T TrigonometricFunction;        /* '<S7>/Trigonometric Function' */
-  real_T y;                            /* '<S7>/Product' */
+  real_T Sum;                          /* '<S6>/Sum' */
+  real_T TrigonometricFunction;        /* '<S6>/Trigonometric Function' */
+  real_T y;                            /* '<S6>/Product' */
   real_T DiscreteTimeIntegrator4;      /* '<Root>/Discrete-Time Integrator4' */
   real_T TransferFcn11;                /* '<Root>/Transfer Fcn11' */
   real_T Saturation4;                  /* '<Root>/Saturation4' */
-  real_T Sum1;                         /* '<S7>/Sum1' */
-  real_T TrigonometricFunction3;       /* '<S7>/Trigonometric Function3' */
-  real_T z_n;                          /* '<S7>/Product3' */
-  real_T Sum2_n;                       /* '<S7>/Sum2' */
-  real_T XT1;                          /* '<S8>/XT1' */
-  real_T YT1;                          /* '<S8>/YT1' */
-  real_T ZT1;                          /* '<S8>/ZT1' */
-  real_T XT2;                          /* '<S8>/XT2' */
-  real_T YT2;                          /* '<S8>/YT2' */
-  real_T ZT2;                          /* '<S8>/ZT2' */
-  real_T XT3;                          /* '<S8>/XT3' */
-  real_T YT3;                          /* '<S8>/YT3' */
-  real_T ZT3;                          /* '<S8>/ZT3' */
-  real_T XT4;                          /* '<S8>/XT4' */
-  real_T YT4;                          /* '<S8>/YT4' */
-  real_T ZT4;                          /* '<S8>/ZT4' */
-  real_T XT5;                          /* '<S8>/XT5' */
-  real_T YT5;                          /* '<S8>/YT5' */
-  real_T ZT5;                          /* '<S8>/ZT5' */
-  real_T XT6;                          /* '<S8>/XT6' */
-  real_T YT6;                          /* '<S8>/YT6' */
-  real_T ZT6;                          /* '<S8>/ZT6' */
-  real_T XB1;                          /* '<S8>/XB1' */
-  real_T YB1;                          /* '<S8>/YB1' */
-  real_T ZB1;                          /* '<S8>/ZB1' */
-  real_T XB2;                          /* '<S8>/XB2' */
-  real_T YB2;                          /* '<S8>/YB2' */
-  real_T ZB2;                          /* '<S8>/ZB2' */
-  real_T XB3;                          /* '<S8>/XB3' */
-  real_T YB3;                          /* '<S8>/YB3' */
-  real_T ZB3;                          /* '<S8>/ZB3' */
-  real_T XB4;                          /* '<S8>/XB4' */
-  real_T YB4;                          /* '<S8>/YB4' */
-  real_T ZB4;                          /* '<S8>/ZB4' */
-  real_T XB5;                          /* '<S8>/XB5' */
-  real_T YB5;                          /* '<S8>/YB5' */
-  real_T ZB5;                          /* '<S8>/ZB5' */
-  real_T XB6;                          /* '<S8>/XB6' */
-  real_T YB6;                          /* '<S8>/YB6' */
-  real_T ZB6;                          /* '<S8>/ZB6' */
-  real_T CL6;                          /* '<S8>/CL6' */
-  real_T Add5;                         /* '<S8>/Add5' */
-  real_T Divide5;                      /* '<S8>/Divide5' */
-  real_T Divide4;                      /* '<S6>/Divide4' */
-  real_T CL1;                          /* '<S8>/CL1' */
-  real_T Add;                          /* '<S8>/Add' */
-  real_T Divide;                       /* '<S8>/Divide' */
-  real_T Divide1;                      /* '<S6>/Divide1' */
-  real_T CL2;                          /* '<S8>/CL2' */
-  real_T Add1;                         /* '<S8>/Add1' */
-  real_T Divide1_a;                    /* '<S8>/Divide1' */
-  real_T Divide2;                      /* '<S6>/Divide2' */
-  real_T CL3;                          /* '<S8>/CL3' */
-  real_T Add2;                         /* '<S8>/Add2' */
-  real_T Divide2_f;                    /* '<S8>/Divide2' */
-  real_T Divide3;                      /* '<S6>/Divide3' */
-  real_T CL4;                          /* '<S8>/CL4' */
-  real_T Add3;                         /* '<S8>/Add3' */
-  real_T Divide3_f;                    /* '<S8>/Divide3' */
-  real_T Divide5_f;                    /* '<S6>/Divide5' */
-  real_T CL5;                          /* '<S8>/CL5' */
-  real_T Add4;                         /* '<S8>/Add4' */
-  real_T Divide4_h;                    /* '<S8>/Divide4' */
-  real_T Divide6;                      /* '<S6>/Divide6' */
+  real_T Sum1;                         /* '<S6>/Sum1' */
+  real_T TrigonometricFunction3;       /* '<S6>/Trigonometric Function3' */
+  real_T z_n;                          /* '<S6>/Product3' */
+  real_T Sum2_n;                       /* '<S6>/Sum2' */
+  real_T XT1;                          /* '<S7>/XT1' */
+  real_T YT1;                          /* '<S7>/YT1' */
+  real_T ZT1;                          /* '<S7>/ZT1' */
+  real_T XT2;                          /* '<S7>/XT2' */
+  real_T YT2;                          /* '<S7>/YT2' */
+  real_T ZT2;                          /* '<S7>/ZT2' */
+  real_T XT3;                          /* '<S7>/XT3' */
+  real_T YT3;                          /* '<S7>/YT3' */
+  real_T ZT3;                          /* '<S7>/ZT3' */
+  real_T XT4;                          /* '<S7>/XT4' */
+  real_T YT4;                          /* '<S7>/YT4' */
+  real_T ZT4;                          /* '<S7>/ZT4' */
+  real_T XT5;                          /* '<S7>/XT5' */
+  real_T YT5;                          /* '<S7>/YT5' */
+  real_T ZT5;                          /* '<S7>/ZT5' */
+  real_T XT6;                          /* '<S7>/XT6' */
+  real_T YT6;                          /* '<S7>/YT6' */
+  real_T ZT6;                          /* '<S7>/ZT6' */
+  real_T XB1;                          /* '<S7>/XB1' */
+  real_T YB1;                          /* '<S7>/YB1' */
+  real_T ZB1;                          /* '<S7>/ZB1' */
+  real_T XB2;                          /* '<S7>/XB2' */
+  real_T YB2;                          /* '<S7>/YB2' */
+  real_T ZB2;                          /* '<S7>/ZB2' */
+  real_T XB3;                          /* '<S7>/XB3' */
+  real_T YB3;                          /* '<S7>/YB3' */
+  real_T ZB3;                          /* '<S7>/ZB3' */
+  real_T XB4;                          /* '<S7>/XB4' */
+  real_T YB4;                          /* '<S7>/YB4' */
+  real_T ZB4;                          /* '<S7>/ZB4' */
+  real_T XB5;                          /* '<S7>/XB5' */
+  real_T YB5;                          /* '<S7>/YB5' */
+  real_T ZB5;                          /* '<S7>/ZB5' */
+  real_T XB6;                          /* '<S7>/XB6' */
+  real_T YB6;                          /* '<S7>/YB6' */
+  real_T ZB6;                          /* '<S7>/ZB6' */
+  real_T CL6;                          /* '<S7>/CL6' */
+  real_T Add5;                         /* '<S7>/Add5' */
+  real_T Divide5;                      /* '<S7>/Divide5' */
+  real_T Divide4;                      /* '<S5>/Divide4' */
+  real_T CL1;                          /* '<S7>/CL1' */
+  real_T Add;                          /* '<S7>/Add' */
+  real_T Divide;                       /* '<S7>/Divide' */
+  real_T Divide1;                      /* '<S5>/Divide1' */
+  real_T CL2;                          /* '<S7>/CL2' */
+  real_T Add1;                         /* '<S7>/Add1' */
+  real_T Divide1_a;                    /* '<S7>/Divide1' */
+  real_T Divide2;                      /* '<S5>/Divide2' */
+  real_T CL3;                          /* '<S7>/CL3' */
+  real_T Add2;                         /* '<S7>/Add2' */
+  real_T Divide2_f;                    /* '<S7>/Divide2' */
+  real_T Divide3;                      /* '<S5>/Divide3' */
+  real_T CL4;                          /* '<S7>/CL4' */
+  real_T Add3;                         /* '<S7>/Add3' */
+  real_T Divide3_f;                    /* '<S7>/Divide3' */
+  real_T Divide5_f;                    /* '<S5>/Divide5' */
+  real_T CL5;                          /* '<S7>/CL5' */
+  real_T Add4;                         /* '<S7>/Add4' */
+  real_T Divide4_h;                    /* '<S7>/Divide4' */
+  real_T Divide6;                      /* '<S5>/Divide6' */
   real_T Derivative1;                  /* '<Root>/Derivative1' */
   real_T Derivative2;                  /* '<Root>/Derivative2' */
   real_T accx;                         /* '<Root>/Cast2' */
@@ -197,24 +198,24 @@ typedef struct {
   real_T TransferFcn5;                 /* '<Root>/Transfer Fcn5' */
   real_T TransferFcn6;                 /* '<Root>/Transfer Fcn6' */
   real_T TransferFcn8;                 /* '<Root>/Transfer Fcn8' */
-  uint8_T DataTypeConversion17;        /* '<S6>/Data Type Conversion17' */
-  uint8_T DataTypeConversion15;        /* '<S6>/Data Type Conversion15' */
-  uint8_T DataTypeConversion4_e;       /* '<S6>/Data Type Conversion4' */
-  uint8_T DataTypeConversion2;         /* '<S6>/Data Type Conversion2' */
-  uint8_T DataTypeConversion20;        /* '<S6>/Data Type Conversion20' */
-  uint8_T DataTypeConversion19;        /* '<S6>/Data Type Conversion19' */
-  uint8_T DataTypeConversion22;        /* '<S6>/Data Type Conversion22' */
-  uint8_T DataTypeConversion21;        /* '<S6>/Data Type Conversion21' */
-  uint8_T DataTypeConversion7_i;       /* '<S6>/Data Type Conversion7' */
-  uint8_T DataTypeConversion23;        /* '<S6>/Data Type Conversion23' */
-  uint8_T DataTypeConversion13;        /* '<S6>/Data Type Conversion13' */
-  uint8_T DataTypeConversion10;        /* '<S6>/Data Type Conversion10' */
-  int8_T DataTypeConversion16;         /* '<S6>/Data Type Conversion16' */
-  int8_T DataTypeConversion18;         /* '<S6>/Data Type Conversion18' */
-  int8_T DataTypeConversion24;         /* '<S6>/Data Type Conversion24' */
-  int8_T DataTypeConversion25;         /* '<S6>/Data Type Conversion25' */
-  int8_T DataTypeConversion26;         /* '<S6>/Data Type Conversion26' */
-  int8_T DataTypeConversion27;         /* '<S6>/Data Type Conversion27' */
+  uint8_T DataTypeConversion17;        /* '<S5>/Data Type Conversion17' */
+  uint8_T DataTypeConversion15;        /* '<S5>/Data Type Conversion15' */
+  uint8_T DataTypeConversion4_e;       /* '<S5>/Data Type Conversion4' */
+  uint8_T DataTypeConversion2;         /* '<S5>/Data Type Conversion2' */
+  uint8_T DataTypeConversion20;        /* '<S5>/Data Type Conversion20' */
+  uint8_T DataTypeConversion19;        /* '<S5>/Data Type Conversion19' */
+  uint8_T DataTypeConversion22;        /* '<S5>/Data Type Conversion22' */
+  uint8_T DataTypeConversion21;        /* '<S5>/Data Type Conversion21' */
+  uint8_T DataTypeConversion7_i;       /* '<S5>/Data Type Conversion7' */
+  uint8_T DataTypeConversion23;        /* '<S5>/Data Type Conversion23' */
+  uint8_T DataTypeConversion13;        /* '<S5>/Data Type Conversion13' */
+  uint8_T DataTypeConversion10;        /* '<S5>/Data Type Conversion10' */
+  int8_T DataTypeConversion16;         /* '<S5>/Data Type Conversion16' */
+  int8_T DataTypeConversion18;         /* '<S5>/Data Type Conversion18' */
+  int8_T DataTypeConversion24;         /* '<S5>/Data Type Conversion24' */
+  int8_T DataTypeConversion25;         /* '<S5>/Data Type Conversion25' */
+  int8_T DataTypeConversion26;         /* '<S5>/Data Type Conversion26' */
+  int8_T DataTypeConversion27;         /* '<S5>/Data Type Conversion27' */
   boolean_T Compare[3];                /* '<S1>/Compare' */
 } B_c_coder_T;
 
@@ -292,20 +293,20 @@ typedef struct {
 typedef struct {
   const real_T Gain4;                  /* '<Root>/Gain4' */
   const real_T Saturation;             /* '<Root>/Saturation' */
-  const real_T Product5;               /* '<S11>/Product5' */
-  const uint8_T DataTypeConversion;    /* '<S6>/Data Type Conversion' */
-  const uint8_T DataTypeConversion1;   /* '<S6>/Data Type Conversion1' */
-  const uint8_T DataTypeConversion11;  /* '<S6>/Data Type Conversion11' */
-  const uint8_T DataTypeConversion12;  /* '<S6>/Data Type Conversion12' */
-  const uint8_T DataTypeConversion14;  /* '<S6>/Data Type Conversion14' */
-  const uint8_T DataTypeConversion28;  /* '<S6>/Data Type Conversion28' */
-  const uint8_T DataTypeConversion29;  /* '<S6>/Data Type Conversion29' */
-  const uint8_T DataTypeConversion3;   /* '<S6>/Data Type Conversion3' */
-  const uint8_T DataTypeConversion30;  /* '<S6>/Data Type Conversion30' */
-  const uint8_T DataTypeConversion5;   /* '<S6>/Data Type Conversion5' */
-  const uint8_T DataTypeConversion6;   /* '<S6>/Data Type Conversion6' */
-  const uint8_T DataTypeConversion8;   /* '<S6>/Data Type Conversion8' */
-  const uint8_T DataTypeConversion9;   /* '<S6>/Data Type Conversion9' */
+  const real_T Product5;               /* '<S10>/Product5' */
+  const uint8_T DataTypeConversion;    /* '<S5>/Data Type Conversion' */
+  const uint8_T DataTypeConversion1;   /* '<S5>/Data Type Conversion1' */
+  const uint8_T DataTypeConversion11;  /* '<S5>/Data Type Conversion11' */
+  const uint8_T DataTypeConversion12;  /* '<S5>/Data Type Conversion12' */
+  const uint8_T DataTypeConversion14;  /* '<S5>/Data Type Conversion14' */
+  const uint8_T DataTypeConversion28;  /* '<S5>/Data Type Conversion28' */
+  const uint8_T DataTypeConversion29;  /* '<S5>/Data Type Conversion29' */
+  const uint8_T DataTypeConversion3;   /* '<S5>/Data Type Conversion3' */
+  const uint8_T DataTypeConversion30;  /* '<S5>/Data Type Conversion30' */
+  const uint8_T DataTypeConversion5;   /* '<S5>/Data Type Conversion5' */
+  const uint8_T DataTypeConversion6;   /* '<S5>/Data Type Conversion6' */
+  const uint8_T DataTypeConversion8;   /* '<S5>/Data Type Conversion8' */
+  const uint8_T DataTypeConversion9;   /* '<S5>/Data Type Conversion9' */
 } ConstB_c_coder_T;
 
 #ifndef ODE3_INTG
@@ -404,15 +405,14 @@ extern void c_coder_terminate(RT_MODEL_c_coder_T *const c_coder_M);
  * '<Root>' : 'c_coder'
  * '<S1>'   : 'c_coder/Compare To Constant'
  * '<S2>'   : 'c_coder/Convert m to mm'
- * '<S3>'   : 'c_coder/MATLAB Function'
- * '<S4>'   : 'c_coder/Subsystem'
- * '<S5>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof'
- * '<S6>'   : 'c_coder/Subsystem/Escrever 20.01 a 20.06 UNIDRIVE SP ModBus TCP//IP'
- * '<S7>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Cinematica aux'
- * '<S8>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Cinematica Inversa'
- * '<S9>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Deg=>Rad'
- * '<S10>'  : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Deg=>Rad1'
- * '<S11>'  : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Deg=>Rad2'
+ * '<S3>'   : 'c_coder/Subsystem'
+ * '<S4>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof'
+ * '<S5>'   : 'c_coder/Subsystem/Escrever 20.01 a 20.06 UNIDRIVE SP ModBus TCP//IP'
+ * '<S6>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Cinematica aux'
+ * '<S7>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Cinematica Inversa'
+ * '<S8>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Deg=>Rad'
+ * '<S9>'   : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Deg=>Rad1'
+ * '<S10>'  : 'c_coder/Subsystem/Cinemática Inversa Plataforma 6Dof/Deg=>Rad2'
  */
 #endif                                 /* RTW_HEADER_c_coder_h_ */
 
