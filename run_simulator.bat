@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 set exePath=.\Unity\Build
-set exeName=PlatformController.exe
+set exeName=acelerecao.exe
 
 %exePath%\%exeName%
 
