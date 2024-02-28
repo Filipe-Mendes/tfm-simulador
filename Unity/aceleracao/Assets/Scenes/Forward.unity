@@ -29936,6 +29936,9 @@ MonoBehaviour:
   motorForce: 5000
   brakeForce: 15000
   maxSteerAngle: 30
+  frontWheelsColliders:
+  - {fileID: 1151313128}
+  - {fileID: 1421433970}
   frontLeftWheelCollider: {fileID: 1151313128}
   frontRightWheelCollider: {fileID: 1421433970}
   rearLeftWheelCollider: {fileID: 679937984}

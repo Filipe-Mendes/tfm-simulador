@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.145
+ * Model version                  : 8.148
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Wed Feb 14 05:36:51 2024
+ * C/C++ source code generated on : Tue Feb 27 18:39:06 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -72,7 +72,7 @@ extern void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const c_coder_M,
   real_T c_coder_U_Inport3,
   real_T c_coder_U_Inport4,
   real_T c_coder_U_Inport5);
-extern int *getOutput();
+extern uint8_T *getOutput();
 
 /* Block signals (default storage) */
 typedef struct {

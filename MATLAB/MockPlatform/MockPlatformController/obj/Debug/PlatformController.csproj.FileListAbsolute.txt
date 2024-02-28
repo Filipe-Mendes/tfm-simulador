@@ -22,3 +22,11 @@ C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\trash\Platfor
 C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\trash\PlatformController_old\obj\Debug\PlatformController.csproj.CoreCompileInputs.cache
 C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\trash\PlatformController_old\obj\Debug\PlatformController.exe
 C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\trash\PlatformController_old\obj\Debug\PlatformController.pdb
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\bin\Debug\PlatformController.exe.config
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\bin\Debug\PlatformController.exe
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\bin\Debug\PlatformController.pdb
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\obj\Debug\PlatformController.csproj.AssemblyReference.cache
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\obj\Debug\PlatformController.csproj.SuggestedBindingRedirects.cache
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\obj\Debug\PlatformController.csproj.CoreCompileInputs.cache
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\obj\Debug\PlatformController.exe
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\MATLAB\MockPlatform\MockPlatformController\obj\Debug\PlatformController.pdb

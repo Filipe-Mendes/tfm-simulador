@@ -13,42 +13,6 @@ using System.Reflection;
 
 public class PlatformController
 {
-    public struct RT_MODEL_c_coder_T
-    {
-    }
-
-/*    [DllImport("..\\..\\..\\c_coder_win64.dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void rand_numb_initialize();*/
-
-   // [DllImport("..\\..\\..\\..\\c_coder_win64.dll", CallingConvention = CallingConvention.Cdecl)]
-   // public static extern void c_coder_step(
-   //         //ref RT_MODEL_c_coder_T c_coder_M,
-   //         IntPtr c_coder_M,
-   //         double accY,
-   //         double accZ,
-   //         double accX,
-   //         double rotY,
-   //         double rotZ,
-   //         double rotX);
-   // //ref byte[] platformData);
-   // [DllImport("..\\..\\..\\..\\c_coder_win64.dll", CallingConvention = CallingConvention.Cdecl)]
-   // public static extern void c_coder_initialize(
-   //    IntPtr c_coder_M,
-   //    ref double c_coder_U_Inport,
-   //    ref double c_coder_U_Inport1,
-   //    ref double c_coder_U_Inport2,
-   //    ref double c_coder_U_Inport3,
-   //    ref double c_coder_U_Inport4,
-   //    ref double c_coder_U_Inport5
-   //);
-
-    /*    [DllImport("..\\..\\..\\c_coder_win64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void get_out1(byte[] resultArray);*/
-    //[DllImport("..\\..\\..\\..\\c_coder_win64.dll", CallingConvention = CallingConvention.Cdecl)]
-    //public static extern int get_out2(int idkres);
-    //
-    //[DllImport("..\\..\\..\\..\\c_coder_win64.dll", CallingConvention = CallingConvention.Cdecl)]
-    //public static extern void get_out3();
 
     // SERVER
     static IPAddress serverIP= IPAddress.Parse("127.0.0.1");
@@ -59,7 +23,7 @@ public class PlatformController
     static int clientPort = 55002;
 
     // CONNECTION
-    static bool mockConnection = false;
+    static bool mockConnection = true;
     static bool connected = false;
 
     private static TcpClient client;
@@ -90,6 +54,7 @@ public class PlatformController
             {
                 Console.WriteLine("Simulating connection to Stewart Platform");
                 mockConnection = true;
+
             } else
             {
                 Console.WriteLine("Argument not recognized.");
@@ -104,20 +69,19 @@ public class PlatformController
             if (!connected) Environment.Exit(1);
         }*/
 
-
-
-        RT_MODEL_c_coder_T model;
         TcpListener server = null;
         try
         {
 
             server = new TcpListener(serverIP, serverPort);
-
             server.Start();
 
             // Buffer for reading data
-            byte[] bytes = new byte[24 * sizeof(float)];
-            int arraySize = 24;
+            int arraySize = 25;
+            //byte[] bytes = new byte[arraySize * sizeof(float)];
+            byte[] bytes = new byte[arraySize];
+
+
             while (true)
             {
                 Console.Write("\nWaiting for a connection... \n");
@@ -128,37 +92,12 @@ public class PlatformController
 
 
 
-/*                IntPtr modelInstance1 = IntPtr.Zero; // Replace with your actual instance
-
-                // Assuming you have variables for each input
-                double inportValue1 = 0.0; // Replace with your actual values
-                double inportValue2 = 0.0;
-                double inportValue3 = 0.0;
-                double inportValue4 = 0.0;
-                double inportValue5 = 0.0;
-                double inportValue6 = 0.0;
-
-                // Call the C function
-                c_coder_initialize(
-                    modelInstance1,
-                    ref inportValue1,
-                    ref inportValue2,
-                    ref inportValue3,
-                    ref inportValue4,
-                    ref inportValue5,
-                    ref inportValue6
-                );*/
-
-
-
-
-
 
                 // Get a stream object for reading and writing
                 NetworkStream stream = client.GetStream();
 
                 int bytesRead;
-                float[] floatData = null;
+                //float[] floatData = null;
 
                 /*int k = 0;
                 while (k < arraySize)
@@ -173,7 +112,7 @@ public class PlatformController
                     {
                     try
                     {
-                        bytesRead = stream.Read(bytes, 0, arraySize * sizeof(float));
+                        bytesRead = stream.Read(bytes, 0, arraySize);
                         
                     } catch (Exception e)
                     {
@@ -185,57 +124,9 @@ public class PlatformController
                         break;
                     }
 
-
-                    try
-                    {
-                        int floatCount = bytesRead / sizeof(float);
-                        floatData = new float[floatCount];
-
-                        // Use Buffer.BlockCopy to convert bytes to floats
-                        Buffer.BlockCopy(bytes, 0, floatData, 0, bytesRead);
-
-                        // Process the array of floats
-                        Console.WriteLine(floatCount + " Values received from driving simulator: " + string.Join(", ", floatData));
-
-
-                    } catch(Exception e)
-                    {
-                        Console.WriteLine("exception");
-                        Console.WriteLine(e);
-                    }
-                    // Process data with dll
-/*                    byte[] platformData = new byte[25];
-                    IntPtr modelInstance = IntPtr.Zero;
-                    try
-                    {
-                        //if (!mockConnection)
-                        //{
-                        //string relativePath = "..\\..\\..\\..\\c_coder_win64.dll"; // Your relative path
-                        //string fullPath = Path.GetFullPath(relativePath);
-
-                        //Console.WriteLine($"Relative Path: {relativePath}");
-                        //Console.WriteLine($"Full Path: {fullPath}");
-                        Console.WriteLine("BEF");
-                        c_coder_step(modelInstance, floatData[0], floatData[1], floatData[2], floatData[3], floatData[4], floatData[5]);
-                        Console.WriteLine("AFT");
-
-                        byte[] resultArray = new byte[25];
-                        Console.WriteLine("testes: " + testes);
-                        int idk = get_out2(testes);
-                        Console.WriteLine("idk: " + idk);
-                        testes = idk;
-                        Console.WriteLine("testes2: " + testes);
-                            
-                            //SendData(platformData);
-                        //}
-                    } catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        Console.WriteLine("\nDriving simulator disconnected or another error occurred!\n");
-                    }*/
+                    Console.WriteLine(bytesRead + " Values received from driving simulator: " + string.Join(", ", bytes));
+                    
                 }
-
-
 
                 // Send data to Platform
             Console.WriteLine("before client close");

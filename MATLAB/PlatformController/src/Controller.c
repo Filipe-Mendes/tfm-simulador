@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <winsock2.h>
+
 #include <windows.h>
 #include "../include/MATLAB/c_coder_ert_shrlib_rtw/c_coder_types.h"
 #include "../include/MATLAB/c_coder_ert_shrlib_rtw/rtwtypes.h"
@@ -12,13 +13,11 @@
 #include <string.h>
 #include <stdbool.h>
 
-
 #define DEFAULT_BUFLEN 24
 
 typedef void (*Dll_Step)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T); 
 
-
-typedef int* (*Dll_GetOutput)(); 
+typedef uint8_T* (*Dll_GetOutput)(); 
 // typedef void (*Dll_Step)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T, uint8_T[25]);
 typedef void (*Dll_Initialize)(RT_MODEL_c_coder_T* const, real_T, real_T, real_T, real_T, real_T, real_T);
 
@@ -45,7 +44,6 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    // int OPEN_PORT = atoi(argv[1]);
     char *OPEN_PORT = argv[1];
     char *PLATFORM_IP = argv[2];
     char *PLATFORM_PORT = argv[3];
@@ -72,7 +70,6 @@ int main(int argc, char **argv) {
 
 
         if (initialize != NULL && step != NULL) {
-            uint8_T output[25];
             initialize(c_coder_M, c_coder_U_Inport0, c_coder_U_Inport1, c_coder_U_Inport2, c_coder_U_Inport3, c_coder_U_Inport4, c_coder_U_Inport5);
             
 
@@ -111,6 +108,11 @@ int main(int argc, char **argv) {
                 return 1;
             }
 
+            // CHANGE SOCKET TO NON-BLOCKING
+            u_long iMode = 1;            
+            iResult = ioctlsocket(ListenSocket, FIONBIO, &iMode);
+
+
             //// To bind a socket
             // Setup the TCP listening socket
             iResult = bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
@@ -127,19 +129,6 @@ int main(int argc, char **argv) {
             //// Listening on a Socket
             if ( listen( ListenSocket, SOMAXCONN ) == SOCKET_ERROR ) {
                 printf( "Listen failed with error: %d\n", WSAGetLastError() );
-                closesocket(ListenSocket);
-                WSACleanup();
-                return 1;
-            }
-
-            //// Accepting a Connection
-            SOCKET ClientSocket;
-            ClientSocket = INVALID_SOCKET;
-
-            // Accept a client socket
-            ClientSocket = accept(ListenSocket, NULL, NULL);
-            if (ClientSocket == INVALID_SOCKET) {
-                printf("accept failed: %d\n", WSAGetLastError());
                 closesocket(ListenSocket);
                 WSACleanup();
                 return 1;
@@ -181,6 +170,7 @@ int main(int argc, char **argv) {
                 // Connect to server.
                 iResultc = connect( ConnectSocket, ptrc->ai_addr, (int)ptrc->ai_addrlen);
                 if (iResultc == SOCKET_ERROR) {
+                    printf("Can't connect to server 184\n");
                     closesocket(ConnectSocket);
                     ConnectSocket = INVALID_SOCKET;
                 }
@@ -196,32 +186,53 @@ int main(int argc, char **argv) {
             //// Receiving and Sending Data on the Server
             char recvbuf[DEFAULT_BUFLEN];
             int iResults;
+            int iResultx;
             int recvbuflen = DEFAULT_BUFLEN;
 
             float simValues[6];
             // Receive until the peer shuts down the connection
+            
+            u_long iMode0 = 0;            
 
+
+            SOCKET ClientSocket;
+            ClientSocket = INVALID_SOCKET;
+            bool initialZeros = true;
             do {
+                // Accept a client socket
+                if(initialZeros) ClientSocket = accept(ListenSocket, NULL, NULL);
+                if (ClientSocket != INVALID_SOCKET){
+                    initialZeros = false;
+                    // iResultx = ioctlsocket(ListenSocket, FIONBIO, &iMode0);
+                    // CHANGE SOCKET TO BLOCKING
+                    iResultx = ioctlsocket(ClientSocket, FIONBIO, &iMode0);
+                }
 
                 iResults = recv(ClientSocket, recvbuf, recvbuflen, 0);
-                if (iResults > 0) {
+                if (iResults > 0 || initialZeros) {
                     printf("Bytes received: %d  | ", iResults);
-
-
                     memcpy(simValues, recvbuf, sizeof(simValues));
+
+                    if (initialZeros) {
+                        for (int i = 0; i < 6; i++) simValues[i] = 0;
+                    }
+
 
                     // LOOP DO SIMULINK
                     step(c_coder_M, simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
-                    
                     uint8_T *outp = getOutput();
+
+                    int outputLength = 25;
                     printf("Output: ");
-                    for (int i = 0; i < 25; ++i) {
+                    for (int i = 0; i < outputLength; ++i) {
                         printf("%u ", outp[i]);
                     }
                     printf("\n");
 
+
                     if(!MOCK){
-                        iResults = send(ConnectSocket, recvbuf, recvbuflen, 0);
+                        iResults = send(ConnectSocket, (const char *)outp, outputLength, 0);
+
                         if (iResults == SOCKET_ERROR) {
                             printf("send failed: %d\n", WSAGetLastError());
                             closesocket(ConnectSocket);
@@ -240,8 +251,7 @@ int main(int argc, char **argv) {
                     WSACleanup();
                     return 1;
                 }
-
-            } while (iResults > 0);
+            } while (iResults > 0 || initialZeros);
 
 
             //// Disconnecting the Server
