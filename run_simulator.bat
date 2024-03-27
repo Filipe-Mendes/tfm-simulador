@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 set exePath=.\Unity\Build
-set exeName=acelerecao.exe
+set exeName=aceleracao.exe
 
 %exePath%\%exeName%
 

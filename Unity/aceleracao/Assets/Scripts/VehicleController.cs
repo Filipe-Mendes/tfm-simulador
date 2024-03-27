@@ -15,28 +15,46 @@ public class VehicleController : MonoBehaviour
 {
     private bool ready = false;
 
-
-    private bool finishedSetUp = false;
-
     [SerializeField] private Transform resetPos;
     [SerializeField] private GameObject driverPosition;
     [SerializeField] private Camera vrCamera;
 
-
     // Testing variables
-    [SerializeField] private float speedBumpAcc = 0.4f;
+    // [SerializeField] private float speedBumpAcc = 0.4f;
+    [SerializeField] private float speedBumpAcc = 1;
     [SerializeField] private float speedBumpBrake = 0.5f;
     private DRIVING_MODE mode;
+
+
+
+
+
+
+
+
+    [SerializeField] private GameObject[] speedBumps;
+    private bool[] passedSBs = {false, false};
+
+
     [SerializeField] private GameObject speedBump;
     [SerializeField] private GameObject speedBump1;
-
-    [SerializeField] private TMPro.TMP_Text ip_text;
-
+    
     private bool passedSB = false;
     private bool passedSB1 = false;
 
-    [SerializeField] private Boolean begin = false;
-    //[SerializeField] private Boolean hardcoded = false;
+
+
+
+
+
+
+
+
+
+
+    [SerializeField] private TMPro.TMP_Text ip_text;
+
+
     [SerializeField] private int hardcodedStoppingPoint = 100;
     bool decelerating = false;
 
@@ -60,29 +78,13 @@ public class VehicleController : MonoBehaviour
     private float currentSteerAngle;
     private float currentbrakeForce;
 
-
     [SerializeField] private float motorForce;
     private float reverseMotorForce;
     [SerializeField] private float brakeForce;
     [SerializeField] private float maxSteerAngle;
 
-    [SerializeField] private WheelCollider[] frontWheelsColliders;
-    [SerializeField] private WheelCollider frontLeftWheelCollider;
-    [SerializeField] private WheelCollider frontRightWheelCollider;
-    [SerializeField] private WheelCollider rearLeftWheelCollider;
-    [SerializeField] private WheelCollider rearRightWheelCollider;
-
-    [SerializeField] private Transform frontLeftWheelTransform;
-    [SerializeField] private Transform frontRightWheeTransform;
-    [SerializeField] private Transform rearLeftWheelTransform;
-    [SerializeField] private Transform rearRightWheelTransform;
-
-    // [SerializeField] private float cosHeight;
-    // [SerializeField] private float cosSpeed;
-    // private Boolean started = false;
-
-
-    private TimeSpan now;
+    [SerializeField] private WheelCollider[] wheelColliders;
+    [SerializeField] private Transform[] wheelMeshes;
 
     // Input configurations
     private INPUT_DEVICE inputDevice;
@@ -92,6 +94,7 @@ public class VehicleController : MonoBehaviour
     private InputAction brakeAction;
     private InputAction clutchAction;
     private InputAction reverseAction;
+    private InputAction restartAction;
 
 
     // Steering wheel
@@ -100,8 +103,6 @@ public class VehicleController : MonoBehaviour
 
     private void Start()
     {
-        now = DateTime.Now.TimeOfDay;
-
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMass.transform.position;
         reverseMotorForce = motorForce / 5;
@@ -115,6 +116,8 @@ public class VehicleController : MonoBehaviour
         brakeAction = userInput.actions["Brake"];
         clutchAction = userInput.actions["Clutch"];
         reverseAction = userInput.actions["Reverse"];
+        
+        restartAction = userInput.actions["Restart"];
 
     }
 
@@ -147,51 +150,32 @@ public class VehicleController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Restart the scene
+        if (restartAction.ReadValue<float>() == 1){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+
         if(ready){
             Debug.Log("Vehicle ready");
-            finishedSetUp = true;
+
             // if(clutchAction.ReadValue<float>() != -1) finishedSetUp = true;
 
             // Debug.Log(userInput.currentControlScheme + " || steer: " + steerAction.ReadValue<float>() + " || accelerator: " + acceleratorAction.ReadValue<float>()  
             // + " || brake: " + brakeAction.ReadValue<float>()  + " || clutch: " + clutchAction.ReadValue<float>() );
-
-            /* if (started)
-                {
-                    var cos = cosHeight * Mathf.Cos(Time.time * cosSpeed * 2 * Mathf.PI);
-                    rb.transform.position = rb.transform.position + new Vector3(0, cos, 0);
-                } */
             //UpdateDriverPosition();
+    
+            if (mode != DRIVING_MODE.FREE) PerformTestScenario();
+            else HandleInput();
 
-            if (finishedSetUp) {        
-                if (mode != DRIVING_MODE.FREE)
-                {
-                    PerformTestScenario();
-                }
-                else
-                {
-                    HandleInput();
-                }
-                
-                if (mode == DRIVING_MODE.FREE || begin) //TODO: VER SE BEGIN AINDA SE UTILIZA
-                {
-                    HandleMotor();
-                    HandleSteering();
-                    UpdateWheels();
-                }
-            }
+            HandleMotor();
+            HandleSteering();
+            UpdateWheels();
         }
     }
 
-
     private void HandleInput()
     {
-        // Restart the scene
-        // if (Input.GetKey(KeyCode.R)) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-        // Started car movement
-        // if (Input.GetKey(KeyCode.N)) started = true;
-
-
         acceleratorInput = acceleratorAction.ReadValue<float>();
         brakeInput = brakeAction.ReadValue<float>();
         steerInput = steerAction.ReadValue<float>();
@@ -215,7 +199,34 @@ public class VehicleController : MonoBehaviour
         // HARDCODED MOVEMENT
 
         // STRAIGHT LINE
-        if (mode == DRIVING_MODE.STRAIGHT_LINE || mode == DRIVING_MODE.COLLISION || mode == DRIVING_MODE.SIDE_TILT)
+        if (mode == DRIVING_MODE.STRAIGHT_LINE)
+        {
+            acceleratorInput = 1;
+            //if (rb.transform.position.z > hardcodedStoppingPoint/2)
+            //{
+                if (rb.velocity.magnitude <= 10) {
+                    Debug.Log("ACC 1 " + rb.velocity.magnitude);
+                    acceleratorInput = 1;
+                }
+                else {
+                    Debug.Log("ACC 0 " + rb.velocity.magnitude);
+                    acceleratorInput = 0f;
+                }
+                
+                
+                
+                //acceleratorInput = 0;
+                //if (rb.transform.position.z > hardcodedStoppingPoint + 20) {
+                    //brakeInput = 0.5f;
+                    //if(brakeInput < 1) brakeInput += 0.01f;
+                    // isBraking = true;
+                //}
+            //}
+            //Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z );
+        }
+
+
+        if (mode == DRIVING_MODE.COLLISION || mode == DRIVING_MODE.SIDE_TILT)
         {
             acceleratorInput = 1;
             if (rb.transform.position.z > hardcodedStoppingPoint)
@@ -251,7 +262,6 @@ public class VehicleController : MonoBehaviour
             if (!passedSB && rb.transform.position.z + 25 >= speedBump.transform.position.z)
             {
                 acceleratorInput = 0;
-                // acceleratorInput -= 0.2f;
                 // brakeInput = speedBumpBrake;
             }
 
@@ -277,6 +287,7 @@ public class VehicleController : MonoBehaviour
                 isBraking = true;
                 brakeInput = speedBumpBrake;
             }
+            Debug.Log("acc: " + acceleratorInput);
         }
         else
         {
@@ -292,13 +303,13 @@ public class VehicleController : MonoBehaviour
             acceleratorInput = 0.8f;
 
             //TODO: POR OUTRA VEZ
-            /* if (currentVelocity.z * 3.6 > 35 && !decelerating)
+            if (rb.velocity.z * 3.6 > 35 && !decelerating)
             {
                 // Debug.Log("ai " + acceleratorInput + " || decPos " + decPos + " || pos " + rb.transform.position + " || dec " + decelerating );
                 acceleratorInput = 0.5f;
                 decelerating = true;
                 decPos = rb.transform.position.z;
-            } */
+            }
 
             if (decelerating && rb.transform.position.z >= decPos + 10)
             {
@@ -311,17 +322,15 @@ public class VehicleController : MonoBehaviour
 
     private void HandleMotor()
     {
-        ip_text.text += "\nhandle motor";
         if (reverse)
         {
             acceleratorInput = -acceleratorInput;
-            frontLeftWheelCollider.motorTorque = acceleratorInput * reverseMotorForce;
-            frontRightWheelCollider.motorTorque = acceleratorInput * reverseMotorForce;
+            for(int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
         }
         else
         {
-            frontLeftWheelCollider.motorTorque = acceleratorInput * motorForce;
-            frontRightWheelCollider.motorTorque = acceleratorInput * motorForce;
+            for(int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
+            // for(int i = 0; i < 2; i++) wheelColliders[i].motorTorque = CalculateMotorTorque();
         }
 
         currentbrakeForce = 0;
@@ -331,19 +340,17 @@ public class VehicleController : MonoBehaviour
         ApplyBraking();
     }
 
+
     private void ApplyBraking()
-    {
-        frontRightWheelCollider.brakeTorque = currentbrakeForce;
-        frontLeftWheelCollider.brakeTorque = currentbrakeForce;
-        rearLeftWheelCollider.brakeTorque = currentbrakeForce;
-        rearRightWheelCollider.brakeTorque = currentbrakeForce;
+    {   
+        foreach (WheelCollider wheel in wheelColliders) wheel.brakeTorque = currentbrakeForce;
     }
 
     private void HandleSteering()
     {
         currentSteerAngle = maxSteerAngle * steerInput;
-        frontLeftWheelCollider.steerAngle = currentSteerAngle;
-        frontRightWheelCollider.steerAngle = currentSteerAngle;
+
+        for(int i = 0; i < 2; i++) wheelColliders[i].steerAngle = currentSteerAngle;
 
         steeringWheel.transform.Rotate(maxSteeringWheelAngle * +(steerInput - previousSteerInput), 0, 0, Space.Self);
         previousSteerInput = steerInput;
@@ -351,10 +358,9 @@ public class VehicleController : MonoBehaviour
 
     private void UpdateWheels()
     {
-        UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
-        UpdateSingleWheel(frontRightWheelCollider, frontRightWheeTransform);
-        UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
-        UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
+        for(int i = 0; i < wheelColliders.Length; i++){
+            UpdateSingleWheel(wheelColliders[i], wheelMeshes[i]);
+        }
     }
 
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)

@@ -1,0 +1,8 @@
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\bin\Debug\DebugDSS.exe.config
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\bin\Debug\DebugDSS.exe
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\bin\Debug\DebugDSS.pdb
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\obj\Debug\DebugDSS.csproj.AssemblyReference.cache
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\obj\Debug\DebugDSS.csproj.SuggestedBindingRedirects.cache
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\obj\Debug\DebugDSS.csproj.CoreCompileInputs.cache
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\obj\Debug\DebugDSS.exe
+C:\Users\filip\Documents\ISEL\TFM\Repositorio\tfm-simulador\Unity\DebugDSS\DebugDSS\obj\Debug\DebugDSS.pdb

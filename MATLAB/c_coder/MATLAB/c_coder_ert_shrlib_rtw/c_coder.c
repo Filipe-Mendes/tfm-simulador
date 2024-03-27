@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.148
+ * Model version                  : 8.150
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Tue Feb 27 18:39:06 2024
+ * C/C++ source code generated on : Thu Mar 14 12:28:42 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -28,17 +28,8 @@ __declspec(dllexport) void wrapper_c_coder_step(RT_MODEL_c_coder_T *const
   real_T c_coder_U_Inport4,
   real_T c_coder_U_Inport5)
 {
-  //printf("INSIDE DLL BEFORE");
-  //for (int i = 0; i < 25; ++i) {
-  //    printf("%u ", out1[i]);
-  //}
   c_coder_step(c_coder_M, c_coder_U_Inport, c_coder_U_Inport1, c_coder_U_Inport2,
                c_coder_U_Inport3, c_coder_U_Inport4, c_coder_U_Inport5);
-
-  //printf("INSIDE DLL AFTER");
-  //for (int i = 0; i < 25; ++i) {
-  //    printf("%u ", out1[i]);
-  //}
 }
 
 __declspec(dllexport) void wrapper_c_coder_initialize(RT_MODEL_c_coder_T *const

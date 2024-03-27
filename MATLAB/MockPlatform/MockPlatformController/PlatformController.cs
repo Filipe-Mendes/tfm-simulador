@@ -129,8 +129,8 @@ public class PlatformController
                 }
 
                 // Send data to Platform
-            Console.WriteLine("before client close");
-            client.Close();
+                Console.WriteLine("before client close");
+                client.Close();
 
             }
             
@@ -145,7 +145,7 @@ public class PlatformController
         }
     }
 
-    public static bool ConnectToPlatform()
+/*    public static bool ConnectToPlatform()
     {
         client = new TcpClient();
         try
@@ -166,16 +166,17 @@ public class PlatformController
 
     public static void SendData(byte[] points)
     {
-/*        byte[] data = new byte[points.Length * sizeof(float)];
-        int dataIndex = 0;
-        foreach (float el in points)
-        {
-            byte[] bytes = BitConverter.GetBytes(el);
-            for (int i = 0; i < sizeof(float); i++) data[dataIndex++] = bytes[i];
-        }*/
+        // byte[] data = new byte[points.Length * sizeof(float)];
+        // int dataIndex = 0;
+        // foreach (float el in points)
+        // {
+        //     byte[] bytes = BitConverter.GetBytes(el);
+        //     for (int i = 0; i < sizeof(float); i++) data[dataIndex++] = bytes[i];
+        // }
 
         ns.Write(points, 0, points.Length);
         Console.WriteLine("data sent nr of points:" + points.Length);
         Console.WriteLine("data 0: " + points[0]);
     }
+*/
 }

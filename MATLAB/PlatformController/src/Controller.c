@@ -197,26 +197,28 @@ int main(int argc, char **argv) {
 
             SOCKET ClientSocket;
             ClientSocket = INVALID_SOCKET;
-            bool initialZeros = true;
+            bool connected = false;
             do {
                 // Accept a client socket
-                if(initialZeros) ClientSocket = accept(ListenSocket, NULL, NULL);
+                if(!connected) ClientSocket = accept(ListenSocket, NULL, NULL);
                 if (ClientSocket != INVALID_SOCKET){
-                    initialZeros = false;
+                    connected = true;
                     // iResultx = ioctlsocket(ListenSocket, FIONBIO, &iMode0);
                     // CHANGE SOCKET TO BLOCKING
                     iResultx = ioctlsocket(ClientSocket, FIONBIO, &iMode0);
                 }
 
                 iResults = recv(ClientSocket, recvbuf, recvbuflen, 0);
-                if (iResults > 0 || initialZeros) {
+                if (iResults > 0 || !connected) {
                     printf("Bytes received: %d  | ", iResults);
                     memcpy(simValues, recvbuf, sizeof(simValues));
 
-                    if (initialZeros) {
+                    if (!connected) {
                         for (int i = 0; i < 6; i++) simValues[i] = 0;
                     }
 
+
+                    printf("Input: %.6f, %.6f, %.6f, %.6f, %.6f, %.6f \n", simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
 
                     // LOOP DO SIMULINK
                     step(c_coder_M, simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
@@ -243,16 +245,22 @@ int main(int argc, char **argv) {
                     }
 
 
-                } else if (iResults == 0)
+                } else if (iResults == 0){
                     printf("Connection closing...\n");
-                else {
+                    connected = false;
+                } else {
                     printf("recv failed: %d\n", WSAGetLastError());
                     closesocket(ClientSocket);
                     WSACleanup();
                     return 1;
                 }
-            } while (iResults > 0 || initialZeros);
+                usleep(20000); // TODO: TO BE TESTED
+            // } while (iResults > 0 || initialZeros);
+            } while (true);
 
+            //
+            // CODE BELOW NEVER EXECUTES, TO BE REMOVED
+            //
 
             //// Disconnecting the Server
             // shutdown the send half of the connection since no more data will be sent

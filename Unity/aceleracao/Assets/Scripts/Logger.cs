@@ -9,6 +9,7 @@ public class Logger : MonoBehaviour
 
     // Vehicle
     [SerializeField] private GameObject vehicle;
+    [SerializeField] private GameObject wheels;
     private Rigidbody rb;
 
     // Movement measurements
@@ -18,6 +19,7 @@ public class Logger : MonoBehaviour
     private Vector3 currentVelocity;
     private Vector3 lastVelocity;
     private Vector3 lastPosition;
+    private Vector3 currentPosition;
     private Quaternion rotation;
 
     private float[] pointsToSend;
@@ -47,6 +49,12 @@ public class Logger : MonoBehaviour
         lastVelocity = transform.InverseTransformDirection(rb.velocity);
 
         timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        // lastPosition = CalculateAverageWheelPosition();
+        // lastPosition = transform.InverseTransformDirection(rb.centerOfMass);
+        // lastVelocity = new Vector3(0,0,0);//transform.InverseTransformDirection(rb.velocity);
+        // lastAcceleration = new Vector3(0,0,0);//transform.InverseTransformDirection(rb.velocity);
+
     }
 
     void FixedUpdate()
@@ -78,6 +86,8 @@ public class Logger : MonoBehaviour
 
         // SEND TO PLATFORM
         platformInterface.SendData(points);
+
+        Debug.Log("x: " + xaxis + " || y: " + yaxis + " || z: " + zaxis);
     }
 
     // TODO: REMOVE
@@ -196,6 +206,10 @@ public class Logger : MonoBehaviour
 
     private void CalculateValues()
     {
+        // currentPosition = CalculateAverageWheelPosition();
+        // currentPosition = transform.InverseTransformDirection(rb.worldCenterOfMass);
+        //Debug.Log("cp: " + currentPosition);
+        // currentVelocity = (currentPosition - lastPosition) / Time.fixedDeltaTime;
         currentVelocity = transform.InverseTransformDirection(rb.velocity);
         acceleration = (currentVelocity - lastVelocity) / Time.fixedDeltaTime;
         jerk = (acceleration - lastAcceleration) / Time.fixedDeltaTime;
@@ -207,12 +221,29 @@ public class Logger : MonoBehaviour
         lastAcceleration = acceleration;
         rotationArr.Add(rotation);
         positionArr.Add(rb.transform.position);
+        // positionArr.Add(currentPosition);
         lastPosition = rb.transform.position;
+        // lastPosition = currentPosition;
     }
 
     public void TryConnect(){
         platformInterfaceObject.SetActive(true);
         platformInterface = platformInterfaceObject.GetComponent<PlatformInterface>();
         connected = platformInterface.ConnectToPlatform();
+    }
+
+    Vector3 CalculateAverageWheelPosition()
+    {
+        Vector3 sum = Vector3.zero;
+        int childCount = 0;
+
+        foreach (Transform child in wheels.transform)
+        {
+            sum += wheels.transform.TransformPoint(child.localPosition);;
+            childCount++;
+        }
+        Vector3 avg = sum / childCount;
+        Debug.Log("AVG: " + avg);
+        return avg;
     }
 }
