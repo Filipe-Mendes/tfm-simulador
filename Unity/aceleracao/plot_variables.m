@@ -10,6 +10,10 @@ velocity = load('log_velocity.txt');
 acceleration = load('log_acceleration.txt');
 rotation = load('log_rotation.txt');
 
+%comma2point_overwrite('log_torque.txt');
+%torque = load('log_torque.txt');
+
+
 t = 1;
 x = 2;
 y = 3;
@@ -56,3 +60,13 @@ xlabel('Time')
 ylabel('Z value')
 ylim([min_y max_y])
 title('Z value / Time')
+
+%% Torque
+% figure('name','Torque');
+% tor = plot(position(:,t),torque(:,2)); LT = "Torque";
+% 
+% legend([tor], [LT]);
+% xlabel('Time')
+% ylabel('Torque value')
+% %%ylim([min_y max_y])
+% title('Torque value / Time')

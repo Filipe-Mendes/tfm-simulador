@@ -9,14 +9,22 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine.InputSystem;
 using UnityEngine.Assertions;
+using System.Threading;
 
 
 public class VehicleController : MonoBehaviour
 {
+
+    /*     [SerializeField] private float defaultDrag = 0.1f;
+        [SerializeField] private float maxDrag = 3f;
+        [SerializeField] private float dragIncreaseRate = 0.5f;
+        [SerializeField] private float lowVelocityThreshold = 0.18f; */
+
+
     private bool ready = false;
 
-    [SerializeField] private Transform resetPos;
-    [SerializeField] private GameObject driverPosition;
+    // [SerializeField] private Transform resetPos;
+    // [SerializeField] private GameObject driverPosition;
     [SerializeField] private Camera vrCamera;
 
     // Testing variables
@@ -32,27 +40,17 @@ public class VehicleController : MonoBehaviour
 
 
 
-    [SerializeField] private GameObject[] speedBumps;
-    private bool[] passedSBs = {false, false};
+    // [SerializeField] private GameObject[] speedBumps;
+    private int curbBegin = 50;
+    private int curbEnd = 75;
 
-
+    private bool[] passedSBs = { false, false };
     [SerializeField] private GameObject speedBump;
     [SerializeField] private GameObject speedBump1;
-    
+
     private bool passedSB = false;
     private bool passedSB1 = false;
 
-
-
-
-
-
-
-
-
-
-
-    [SerializeField] private TMPro.TMP_Text ip_text;
 
 
     [SerializeField] private int hardcodedStoppingPoint = 100;
@@ -98,8 +96,13 @@ public class VehicleController : MonoBehaviour
 
 
     // Steering wheel
-    [SerializeField] private float maxSteeringWheelAngle = 540; 
+    [SerializeField] private float maxSteeringWheelAngle = 540;
     [SerializeField] private GameObject steeringWheel;
+
+    private long timeStart;
+    private long waitingTime = 4000;
+    private bool waitOver = false;
+
 
     private void Start()
     {
@@ -110,23 +113,30 @@ public class VehicleController : MonoBehaviour
         // Configure Input
         userInput = GetComponent<PlayerInput>();
         userInput.neverAutoSwitchControlSchemes = true;
-        
+
         steerAction = userInput.actions["Steering"];
         acceleratorAction = userInput.actions["Accelerator"];
         brakeAction = userInput.actions["Brake"];
         clutchAction = userInput.actions["Clutch"];
         reverseAction = userInput.actions["Reverse"];
-        
+
         restartAction = userInput.actions["Restart"];
+
+
+        rb.sleepThreshold = 0.0f;
+
+        timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
     }
 
-    public void SetUpVehicle(DRIVING_MODE dm, INPUT_DEVICE ind){
+    public void SetUpVehicle(DRIVING_MODE dm, INPUT_DEVICE ind)
+    {
         mode = dm;
         inputDevice = ind;
         Debug.Log("in: " + userInput.currentControlScheme);
 
-        switch(inputDevice){
+        switch (inputDevice)
+        {
             case INPUT_DEVICE.KEYBOARD:
                 userInput.SwitchCurrentControlScheme("Keyboard&Mouse", InputSystem.devices[0]);
                 break;
@@ -138,33 +148,33 @@ public class VehicleController : MonoBehaviour
         ready = true;
     }
 
-    private void UpdateDriverPosition(){
+    /*     private void UpdateDriverPosition()
+        {
 
-        float rotationAngleY = resetPos.rotation.eulerAngles.y - driverPosition.transform.rotation.eulerAngles.y;
-        driverPosition.transform.Rotate(0,rotationAngleY, 0);
+            float rotationAngleY = resetPos.rotation.eulerAngles.y - driverPosition.transform.rotation.eulerAngles.y;
+            driverPosition.transform.Rotate(0, rotationAngleY, 0);
 
-        Vector3 distance = resetPos.position - vrCamera.transform.position;
-        driverPosition.transform.position += distance;
-    }
-
+            Vector3 distance = resetPos.position - vrCamera.transform.position;
+            driverPosition.transform.position += distance;
+        } */
 
     private void FixedUpdate()
     {
+
         // Restart the scene
-        if (restartAction.ReadValue<float>() == 1){
+        if (restartAction.ReadValue<float>() == 1)
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
+        if (!waitOver)
+        {
+            Debug.Log("wait not over");
+            if (DateTimeOffset.Now.ToUnixTimeMilliseconds() >= timeStart + waitingTime) waitOver = true;
+        }
 
-        if(ready){
-            Debug.Log("Vehicle ready");
-
-            // if(clutchAction.ReadValue<float>() != -1) finishedSetUp = true;
-
-            // Debug.Log(userInput.currentControlScheme + " || steer: " + steerAction.ReadValue<float>() + " || accelerator: " + acceleratorAction.ReadValue<float>()  
-            // + " || brake: " + brakeAction.ReadValue<float>()  + " || clutch: " + clutchAction.ReadValue<float>() );
-            //UpdateDriverPosition();
-    
+        if (ready && waitOver)
+        {
             if (mode != DRIVING_MODE.FREE) PerformTestScenario();
             else HandleInput();
 
@@ -174,25 +184,43 @@ public class VehicleController : MonoBehaviour
         }
     }
 
+    // private float accIn = 0;
+    // private float brIn = 0;
+    private bool drag = false;
+    public float brakeSmoothFactor = 0.05f;  // Smoothing factor for brake input
+    private float smoothedBrakeInput = 0f;  // Store the smoothed brake input
+
+
     private void HandleInput()
     {
         acceleratorInput = acceleratorAction.ReadValue<float>();
         brakeInput = brakeAction.ReadValue<float>();
-        steerInput = steerAction.ReadValue<float>();
-        if(previousSteerInput == -2) previousSteerInput = steerInput; 
 
-        ip_text.text = "";
-        ip_text.text += userInput.currentControlScheme + "\nsteer: " + steerInput + "\naccelerator: " + acceleratorInput + "\nbrake: " + brakeInput  + "\nclutch: " + clutchAction.ReadValue<float>() + "\nreverse: " + reverseAction.ReadValue<float>();
+        // smoothedBrakeInput = Mathf.Lerp(smoothedBrakeInput, brakeInput, brakeSmoothFactor);
+        smoothedBrakeInput = brakeInput;
+        if (brakeInput == 0) smoothedBrakeInput = 0;
+
+        steerInput = steerAction.ReadValue<float>();
+        if (previousSteerInput == -2) previousSteerInput = steerInput;
+        if (acceleratorInput == 0 && brakeInput == 0) drag = true;
+        else drag = false;
+
+        /* if(inputDevice == INPUT_DEVICE.KEYBOARD){
+            acceleratorInput = Mathf.Lerp(acceleratorInput, accIn, 0.05f);
+            brakeInput = Mathf.Lerp(brakeInput, brIn, 0.2f);
+            Debug.Log("LERP accelerator: " + acceleratorInput + " || brake: " + brakeInput);
+        } */
 
         // Putting the car in reverse
         if (Math.Abs((int)rb.velocity.magnitude) < 1)
         {
+            //TODO:
             // if (reverseAction.ReadValue<float>() == 1) reverse = !reverse;
             if (reverseAction.ReadValue<float>() == 1) reverse = true;
             else reverse = false;
-        }   
+        }
     }
-    
+
 
     public void PerformTestScenario()
     {
@@ -201,37 +229,32 @@ public class VehicleController : MonoBehaviour
         // STRAIGHT LINE
         if (mode == DRIVING_MODE.STRAIGHT_LINE)
         {
-            acceleratorInput = 1;
-            //if (rb.transform.position.z > hardcodedStoppingPoint/2)
-            //{
-                if (rb.velocity.magnitude <= 10) {
-                    Debug.Log("ACC 1 " + rb.velocity.magnitude);
-                    acceleratorInput = 1;
-                }
-                else {
-                    Debug.Log("ACC 0 " + rb.velocity.magnitude);
-                    acceleratorInput = 0f;
-                }
-                
-                
-                
-                //acceleratorInput = 0;
-                //if (rb.transform.position.z > hardcodedStoppingPoint + 20) {
-                    //brakeInput = 0.5f;
-                    //if(brakeInput < 1) brakeInput += 0.01f;
-                    // isBraking = true;
-                //}
-            //}
-            //Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z );
-        }
 
-
-        if (mode == DRIVING_MODE.COLLISION || mode == DRIVING_MODE.SIDE_TILT)
-        {
-            acceleratorInput = 1;
-            if (rb.transform.position.z > hardcodedStoppingPoint)
+            acceleratorInput = 1f;
+            if (rb.transform.position.z > hardcodedStoppingPoint / 2)
             {
                 acceleratorInput = 0;
+                if (rb.transform.position.z > hardcodedStoppingPoint + 20)
+                {
+                    brakeInput = 1f;
+                    smoothedBrakeInput = brakeInput;
+                    isBraking = true;
+                }
+            }
+            Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);
+        }
+
+        // TODO: mode == DRIVING_MODE.COLLISION 
+
+
+        // TODO: FINAL
+        if (mode == DRIVING_MODE.SIDE_TILT)
+        {
+            acceleratorInput = 1;
+            if (rb.transform.position.z > curbBegin / 2) acceleratorInput = 0;
+            if (rb.transform.position.z > curbEnd)
+            {
+                brakeInput = 1;
                 isBraking = true;
             }
         }
@@ -240,9 +263,8 @@ public class VehicleController : MonoBehaviour
         if (mode == DRIVING_MODE.REVERSE)
         {
             reverse = true;
-            Debug.Log("test reverse " + reverse);
             acceleratorInput = 1;
-            if (rb.transform.position.z < -hardcodedStoppingPoint)
+            if (rb.transform.position.z < -hardcodedStoppingPoint / 3)
             {
                 acceleratorInput = 0;
                 isBraking = true;
@@ -253,8 +275,6 @@ public class VehicleController : MonoBehaviour
         if (mode == DRIVING_MODE.SPEED_BUMP)
         {
             // Debug.Log(acceleratorInput + " " + brakeInput + " acc: " + acceleration.z + " m/s  vel: " + currentVelocity.z * 3.6 + " km/h" );
-            speedBump.SetActive(true);
-            speedBump1.SetActive(true);
 
             //acceleratorInput = 0.4f;
             acceleratorInput = speedBumpAcc;
@@ -289,11 +309,7 @@ public class VehicleController : MonoBehaviour
             }
             Debug.Log("acc: " + acceleratorInput);
         }
-        else
-        {
-            speedBump.SetActive(false);
-            speedBump1.SetActive(false);
-        }
+
 
         // CURVE
         if (mode == DRIVING_MODE.CURVE)
@@ -322,35 +338,72 @@ public class VehicleController : MonoBehaviour
 
     private void HandleMotor()
     {
+
+        Debug.Log("acc: " + acceleratorInput + " || br: " + smoothedBrakeInput);
+
         if (reverse)
         {
             acceleratorInput = -acceleratorInput;
-            for(int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
+            for (int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
         }
         else
         {
-            for(int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
-            // for(int i = 0; i < 2; i++) wheelColliders[i].motorTorque = CalculateMotorTorque();
+            for (int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
         }
 
         currentbrakeForce = 0;
-        if (isBraking) currentbrakeForce = brakeForce;
-        if (!isBraking && brakeInput != 0) currentbrakeForce = brakeInput * brakeForce;
+        // if (isBraking) currentbrakeForce = brakeForce;
+        // if (!isBraking && brakeInput != 0) currentbrakeForce = brakeInput * brakeForce;
+        currentbrakeForce = brakeForce * smoothedBrakeInput;
+
+        //if (drag) currentbrakeForce = brakeForce * 0.05f;
 
         ApplyBraking();
     }
 
+    // public float brakeSmoothFactor = 0.1f;  // Smoothing factor for brake force
+    // private float smoothedBrakeForce = 0f;  // Store the smoothed brake force
+
+    /* private int springAcc = 35000;
+    private int damperAcc = 4500;
+    
+    private JointSpring suspensionSpring;
+
+    [SerializeField] private int brakeFactor = 10;  */
+
 
     private void ApplyBraking()
-    {   
-        foreach (WheelCollider wheel in wheelColliders) wheel.brakeTorque = currentbrakeForce;
+    {
+        /*         suspensionSpring = wheelColliders[0].suspensionSpring;
+
+                if((currentbrakeForce != 0 || acceleratorInput == 0) && rb.velocity.z < 0.25){
+                    Debug.Log("factor true");
+                    suspensionSpring.spring = springAcc * brakeFactor;
+                    suspensionSpring.damper = damperAcc * brakeFactor;
+
+                    for (int i = 0; i < 4; i++) wheelColliders[i].suspensionSpring = suspensionSpring; 
+
+                } else {
+                    Debug.Log("factor false");
+
+                    suspensionSpring.spring = springAcc;
+                    suspensionSpring.damper = damperAcc;
+
+                    for (int i = 0; i < 4; i++) wheelColliders[i].suspensionSpring = suspensionSpring; 
+                } */
+
+        foreach (WheelCollider wheel in wheelColliders)
+        {
+            wheel.brakeTorque = currentbrakeForce;
+        }
     }
 
     private void HandleSteering()
     {
         currentSteerAngle = maxSteerAngle * steerInput;
-
-        for(int i = 0; i < 2; i++) wheelColliders[i].steerAngle = currentSteerAngle;
+        // Debug.Log("rot: " + Mathf.Lerp(0, currentSteerAngle, t));
+        for (int i = 0; i < 2; i++) wheelColliders[i].steerAngle = Mathf.Lerp(wheelColliders[i].steerAngle, currentSteerAngle, 0.2f);
+        // for (int i = 0; i < 2; i++) wheelColliders[i].steerAngle = currentSteerAngle;
 
         steeringWheel.transform.Rotate(maxSteeringWheelAngle * +(steerInput - previousSteerInput), 0, 0, Space.Self);
         previousSteerInput = steerInput;
@@ -358,7 +411,8 @@ public class VehicleController : MonoBehaviour
 
     private void UpdateWheels()
     {
-        for(int i = 0; i < wheelColliders.Length; i++){
+        for (int i = 0; i < wheelColliders.Length; i++)
+        {
             UpdateSingleWheel(wheelColliders[i], wheelMeshes[i]);
         }
     }
@@ -372,5 +426,15 @@ public class VehicleController : MonoBehaviour
         wheelTransform.position = pos;
     }
 
-    public bool IsReverse(){ return reverse; }
+    public bool IsReverse() { return reverse; }
+
+    public float GetAcceleratorInput()
+    {
+        return acceleratorInput;
+    }
+
+    public float GetBrakeInput()
+    {
+        return smoothedBrakeInput;
+    }
 }

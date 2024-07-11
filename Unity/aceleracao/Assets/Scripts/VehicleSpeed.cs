@@ -8,6 +8,8 @@ public class VehicleSpeed : MonoBehaviour
     [SerializeField] private GameObject vehicle;
     private VehicleController vehicleController;
     private Rigidbody rb;
+    private float speed;
+
 
     void Start()
     {
@@ -18,6 +20,7 @@ public class VehicleSpeed : MonoBehaviour
     void Update()
     {   
         string revText = vehicleController.IsReverse() ? " R" : "";
-        dashboard.text = ""+(int)rb.velocity.magnitude+" km/h" + revText;
+        speed = rb.velocity.magnitude * 3.6f;
+        dashboard.text = ""+ (int)speed +" km/h" + revText;
     }
 }
