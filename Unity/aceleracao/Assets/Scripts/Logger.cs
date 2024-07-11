@@ -241,14 +241,66 @@ public class Logger : MonoBehaviour
                 } */
     }
 
+    private Vector3 avgAcc;
+    [SerializeField] private bool averageAcceleration = true;
+    [SerializeField] private int windowSize = 5;
+    private int windowSizeAdjustment = 0;
+    [SerializeField] private int maxIncreaseAcceleration = 5;
+    private int accCount = 0;
+    private Queue<Vector3> window = new Queue<Vector3>();
+
+    private Vector3 QueueSum(Queue<Vector3> queue){
+        Vector3 sum = new Vector3();
+        foreach(Vector3 ac in queue){
+            sum += ac;
+        }    
+        return sum;
+    }
+
     private void CalculateValues()
     {
+        accCount++;
+
         currentPosition = vehicle.transform.position;
         currentVelocity = vehicle.transform.InverseTransformDirection(rb.velocity);
         lastPosition = currentPosition;
         acceleration = (currentVelocity - lastVelocity) / Time.fixedDeltaTime;
-        lastVelocity = currentVelocity;
 
+        // Ignore spikes in acceleration
+        Vector3 absoluteAcc = new Vector3(Mathf.Abs(acceleration.x),Mathf.Abs(acceleration.y),Mathf.Abs(acceleration.z));
+        Vector3 absoluteLastAcc = new Vector3(Mathf.Abs(lastAcceleration.x),Mathf.Abs(lastAcceleration.y),Mathf.Abs(lastAcceleration.z));
+
+        Vector3 accDifference = acceleration - lastAcceleration;
+
+        if(acceleration != Vector3.zero){
+            Debug.Log("Don't enqueue 1");
+            if (accDifference.x >  maxIncreaseAcceleration  || 
+                accDifference.y >  maxIncreaseAcceleration  || 
+                accDifference.z >  maxIncreaseAcceleration ){
+           /*  if (absoluteAcc.x > absoluteLastAcc.x * maxIncreaseAcceleration || 
+                absoluteAcc.y > absoluteLastAcc.y * maxIncreaseAcceleration || 
+                absoluteAcc.z > absoluteLastAcc.z * maxIncreaseAcceleration){ */
+                Debug.Log("Don't enqueue 2");
+                // Do not enqueue acceleration value
+                windowSizeAdjustment++;
+            } else {
+                Debug.Log("Enqueue");
+                window.Enqueue(acceleration);
+                windowSizeAdjustment = 0;
+            }
+        }   
+
+
+        if(accCount > windowSize && averageAcceleration){
+
+            avgAcc = QueueSum(window)/(windowSize - windowSizeAdjustment);
+            window.Dequeue();
+            acceleration = avgAcc;
+        }
+
+        lastAcceleration = acceleration;
+
+        lastVelocity = currentVelocity;
         rotation = vehicle.transform.rotation;
 
         // CLAMP VALUES IF VALUES EXCEED LIMITS
