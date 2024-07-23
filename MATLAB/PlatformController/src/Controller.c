@@ -254,7 +254,7 @@ int main(int argc, char **argv) {
                     WSACleanup();
                     return 1;
                 }
-                // usleep(20000); // TODO: TO BE TESTED
+                usleep(2000); // TODO: TO BE TESTED
             // } while (iResults > 0 || initialZeros);
             } while (true);
 
