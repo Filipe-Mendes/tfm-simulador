@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'c_coder'.
  *
- * Model version                  : 8.150
+ * Model version                  : 8.153
  * Simulink Coder version         : 9.6 (R2021b) 14-May-2021
- * C/C++ source code generated on : Thu Mar 14 12:28:42 2024
+ * C/C++ source code generated on : Tue Jul 23 17:45:33 2024
  *
  * Target selection: ert_shrlib.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -280,17 +280,17 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* End of Saturate: '<Root>/Saturation2' */
 
-    /* Product: '<S8>/Product5' incorporates:
-     *  Constant: '<S8>/Constant4'
-     *  Constant: '<S8>/Constant5'
+    /* Product: '<S9>/Product5' incorporates:
+     *  Constant: '<S9>/Constant4'
+     *  Constant: '<S9>/Constant5'
      */
     c_coder_B->Product5 = c_coder_B->Saturation2 * 3.1415926535897931 / 180.0;
 
-    /* Trigonometry: '<S6>/Trigonometric Function1' */
+    /* Trigonometry: '<S7>/Trigonometric Function1' */
     c_coder_B->TrigonometricFunction1 = cos(c_coder_B->Product5);
 
-    /* Product: '<S6>/Product1' incorporates:
-     *  Constant: '<S4>/Constant7'
+    /* Product: '<S7>/Product1' incorporates:
+     *  Constant: '<S5>/Constant7'
      */
     c_coder_B->z = c_coder_B->TrigonometricFunction1 * 180.0;
 
@@ -314,16 +314,16 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* End of Saturate: '<Root>/Saturation1' */
 
-    /* Product: '<S9>/Product5' incorporates:
-     *  Constant: '<S9>/Constant4'
-     *  Constant: '<S9>/Constant5'
+    /* Product: '<S10>/Product5' incorporates:
+     *  Constant: '<S10>/Constant4'
+     *  Constant: '<S10>/Constant5'
      */
     c_coder_B->Product5_e = c_coder_B->Saturation1 * 3.1415926535897931 / 180.0;
 
-    /* Trigonometry: '<S6>/Trigonometric Function2' */
+    /* Trigonometry: '<S7>/Trigonometric Function2' */
     c_coder_B->TrigonometricFunction2 = sin(c_coder_B->Product5_e);
 
-    /* Product: '<S6>/Product2' */
+    /* Product: '<S7>/Product2' */
     c_coder_B->x = c_coder_B->z * c_coder_B->TrigonometricFunction2;
     if (rtmIsMajorTimeStep(c_coder_M)) {
       /* DiscreteIntegrator: '<Root>/Discrete-Time Integrator5' */
@@ -353,14 +353,17 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* End of Saturate: '<Root>/Saturation6' */
 
-    /* Sum: '<S6>/Sum' */
-    c_coder_B->Sum = c_coder_B->x + c_coder_B->posx_filt;
+    /* Gain: '<S4>/Gain6' */
+    c_coder_B->Gain6 = 0.1 * c_coder_B->posx_filt;
 
-    /* Trigonometry: '<S6>/Trigonometric Function' */
+    /* Sum: '<S7>/Sum' */
+    c_coder_B->Sum = c_coder_B->x + c_coder_B->Gain6;
+
+    /* Trigonometry: '<S7>/Trigonometric Function' */
     c_coder_B->TrigonometricFunction = sin(c_coder_B->Product5);
 
-    /* Product: '<S6>/Product' incorporates:
-     *  Constant: '<S4>/Constant7'
+    /* Product: '<S7>/Product' incorporates:
+     *  Constant: '<S5>/Constant7'
      */
     c_coder_B->y = c_coder_B->TrigonometricFunction * 180.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
@@ -392,24 +395,27 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* End of Saturate: '<Root>/Saturation4' */
 
-    /* Sum: '<S6>/Sum1' */
-    c_coder_B->Sum1 = c_coder_B->y + c_coder_B->Saturation4;
+    /* Gain: '<S4>/Gain1' */
+    c_coder_B->Gain1 = 0.1 * c_coder_B->Saturation4;
 
-    /* Trigonometry: '<S6>/Trigonometric Function3' */
+    /* Sum: '<S7>/Sum1' */
+    c_coder_B->Sum1 = c_coder_B->y + c_coder_B->Gain1;
+
+    /* Trigonometry: '<S7>/Trigonometric Function3' */
     c_coder_B->TrigonometricFunction3 = cos(c_coder_B->Product5_e);
 
-    /* Product: '<S6>/Product3' */
+    /* Product: '<S7>/Product3' */
     c_coder_B->z_n = c_coder_B->z * c_coder_B->TrigonometricFunction3;
 
-    /* Sum: '<S6>/Sum2' incorporates:
+    /* Sum: '<S7>/Sum2' incorporates:
      *  Constant: '<Root>/Constant5'
-     *  Constant: '<S4>/Constant5'
+     *  Constant: '<S5>/Constant5'
      */
     c_coder_B->Sum2_n = (1100.0 - c_coder_B->z_n) - 180.0;
 
-    /* Fcn: '<S7>/XT1' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/XT1' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->XT1 = ((sin(c_coder_B->Product5) * sin(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + cos(c_coder_B->Product5_e)
@@ -419,18 +425,18 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + -cos(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 220.0) + c_coder_B->Sum;
 
-    /* Fcn: '<S7>/YT1' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/YT1' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->YT1 = (-0.16666666666666666 * cos(c_coder_B->Product5) * sin
                       (c_coder_ConstB.Product5) * 1.7320508075688772 * (2.0 *
       690.0 + 220.0) + 0.5 * cos(c_coder_B->Product5) * cos
                       (c_coder_ConstB.Product5) * 220.0) + c_coder_B->Sum1;
 
-    /* Fcn: '<S7>/ZT1' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/ZT1' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->ZT1 = ((sin(c_coder_B->Product5) * cos(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + -sin(c_coder_B->Product5_e)
@@ -440,9 +446,9 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + sin(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 220.0) + c_coder_B->Sum2_n;
 
-    /* Fcn: '<S7>/XT2' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/XT2' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->XT2 = ((sin(c_coder_B->Product5) * sin(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + cos(c_coder_B->Product5_e)
@@ -452,18 +458,18 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + -cos(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) / 2.0 * (690.0 + 220.0)) + c_coder_B->Sum;
 
-    /* Fcn: '<S7>/YT2' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/YT2' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->YT2 = (0.16666666666666666 * cos(c_coder_B->Product5) * sin
                       (c_coder_ConstB.Product5) * 1.7320508075688772 * (690.0 -
       220.0) + 0.5 * cos(c_coder_B->Product5) * cos(c_coder_ConstB.Product5) *
                       (690.0 + 220.0)) + c_coder_B->Sum1;
 
-    /* Fcn: '<S7>/ZT2' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/ZT2' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->ZT2 = ((sin(c_coder_B->Product5) * cos(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + -sin(c_coder_B->Product5_e)
@@ -473,9 +479,9 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + sin(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * (690.0 + 220.0)) + c_coder_B->Sum2_n;
 
-    /* Fcn: '<S7>/XT3' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/XT3' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->XT3 = ((sin(c_coder_B->Product5) * sin(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + cos(c_coder_B->Product5_e)
@@ -485,18 +491,18 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + -cos(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 690.0) + c_coder_B->Sum;
 
-    /* Fcn: '<S7>/YT3' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/YT3' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->YT3 = (0.16666666666666666 * cos(c_coder_B->Product5) * sin
                       (c_coder_ConstB.Product5) * 1.7320508075688772 * (2.0 *
       220.0 + 690.0) + 0.5 * cos(c_coder_B->Product5) * cos
                       (c_coder_ConstB.Product5) * 690.0) + c_coder_B->Sum1;
 
-    /* Fcn: '<S7>/ZT3' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/ZT3' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->ZT3 = ((sin(c_coder_B->Product5) * cos(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + -sin(c_coder_B->Product5_e)
@@ -506,9 +512,9 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + sin(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 690.0) + c_coder_B->Sum2_n;
 
-    /* Fcn: '<S7>/XT4' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/XT4' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->XT4 = ((sin(c_coder_B->Product5) * sin(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + cos(c_coder_B->Product5_e)
@@ -518,18 +524,18 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + -cos(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 690.0) + c_coder_B->Sum;
 
-    /* Fcn: '<S7>/YT4' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/YT4' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->YT4 = (0.16666666666666666 * cos(c_coder_B->Product5) * sin
                       (c_coder_ConstB.Product5) * 1.7320508075688772 * (2.0 *
       220.0 + 690.0) - 0.5 * cos(c_coder_B->Product5) * cos
                       (c_coder_ConstB.Product5) * 690.0) + c_coder_B->Sum1;
 
-    /* Fcn: '<S7>/ZT4' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/ZT4' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->ZT4 = ((sin(c_coder_B->Product5) * cos(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + -sin(c_coder_B->Product5_e)
@@ -539,9 +545,9 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + sin(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 690.0) + c_coder_B->Sum2_n;
 
-    /* Fcn: '<S7>/XT5' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/XT5' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->XT5 = ((sin(c_coder_B->Product5) * sin(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + cos(c_coder_B->Product5_e)
@@ -551,18 +557,18 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + -cos(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * (690.0 + 220.0)) + c_coder_B->Sum;
 
-    /* Fcn: '<S7>/YT5' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/YT5' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->YT5 = (0.16666666666666666 * cos(c_coder_B->Product5) * sin
                       (c_coder_ConstB.Product5) * 1.7320508075688772 * (690.0 -
       220.0) - 0.5 * cos(c_coder_B->Product5) * cos(c_coder_ConstB.Product5) *
                       (690.0 + 220.0)) + c_coder_B->Sum1;
 
-    /* Fcn: '<S7>/ZT5' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/ZT5' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->ZT5 = ((sin(c_coder_B->Product5) * cos(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + -sin(c_coder_B->Product5_e)
@@ -572,9 +578,9 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + sin(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * (690.0 + 220.0)) + c_coder_B->Sum2_n;
 
-    /* Fcn: '<S7>/XT6' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/XT6' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->XT6 = ((sin(c_coder_B->Product5) * sin(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + cos(c_coder_B->Product5_e)
@@ -584,18 +590,18 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + -cos(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 220.0) + c_coder_B->Sum;
 
-    /* Fcn: '<S7>/YT6' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/YT6' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->YT6 = (-0.16666666666666666 * cos(c_coder_B->Product5) * sin
                       (c_coder_ConstB.Product5) * 1.7320508075688772 * (2.0 *
       690.0 + 220.0) - 0.5 * cos(c_coder_B->Product5) * cos
                       (c_coder_ConstB.Product5) * 220.0) + c_coder_B->Sum1;
 
-    /* Fcn: '<S7>/ZT6' incorporates:
-     *  Constant: '<S4>/Constant2'
-     *  Constant: '<S4>/Constant3'
+    /* Fcn: '<S8>/ZT6' incorporates:
+     *  Constant: '<S5>/Constant2'
+     *  Constant: '<S5>/Constant3'
      */
     c_coder_B->ZT6 = ((sin(c_coder_B->Product5) * cos(c_coder_B->Product5_e) *
                        sin(c_coder_ConstB.Product5) + -sin(c_coder_B->Product5_e)
@@ -605,93 +611,93 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       (c_coder_ConstB.Product5) + sin(c_coder_B->Product5_e) * sin
       (c_coder_ConstB.Product5)) * 0.5 * 220.0) + c_coder_B->Sum2_n;
 
-    /* Fcn: '<S7>/XB1' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/XB1' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->XB1 = (2.0 * 1200.0 + 210.0) * 0.28867513459481287;
 
-    /* Fcn: '<S7>/YB1' incorporates:
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/YB1' incorporates:
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->YB1 = 0.5 * 210.0;
 
-    /* Fcn: '<S7>/ZB1' */
+    /* Fcn: '<S8>/ZB1' */
     c_coder_B->ZB1 = 0.0;
 
-    /* Fcn: '<S7>/XB2' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/XB2' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->XB2 = (1200.0 - 210.0) * -0.28867513459481287;
 
-    /* Fcn: '<S7>/YB2' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/YB2' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->YB2 = (1200.0 + 210.0) * 0.5;
 
-    /* Fcn: '<S7>/ZB2' */
+    /* Fcn: '<S8>/ZB2' */
     c_coder_B->ZB2 = 0.0;
 
-    /* Fcn: '<S7>/XB3' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/XB3' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->XB3 = (2.0 * 210.0 + 1200.0) * -0.28867513459481287;
 
-    /* Fcn: '<S7>/YB3' incorporates:
-     *  Constant: '<S4>/Constant'
+    /* Fcn: '<S8>/YB3' incorporates:
+     *  Constant: '<S5>/Constant'
      */
     c_coder_B->YB3 = 0.5 * 1200.0;
 
-    /* Fcn: '<S7>/ZB3' */
+    /* Fcn: '<S8>/ZB3' */
     c_coder_B->ZB3 = 0.0;
 
-    /* Fcn: '<S7>/XB4' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/XB4' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->XB4 = (2.0 * 210.0 + 1200.0) * -0.28867513459481287;
 
-    /* Fcn: '<S7>/YB4' incorporates:
-     *  Constant: '<S4>/Constant'
+    /* Fcn: '<S8>/YB4' incorporates:
+     *  Constant: '<S5>/Constant'
      */
     c_coder_B->YB4 = -0.5 * 1200.0;
 
-    /* Fcn: '<S7>/ZB4' */
+    /* Fcn: '<S8>/ZB4' */
     c_coder_B->ZB4 = 0.0;
 
-    /* Fcn: '<S7>/XB5' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/XB5' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->XB5 = (1200.0 - 210.0) * -0.28867513459481287;
 
-    /* Fcn: '<S7>/YB5' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/YB5' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->YB5 = (1200.0 + 210.0) * -0.5;
 
-    /* Fcn: '<S7>/ZB5' */
+    /* Fcn: '<S8>/ZB5' */
     c_coder_B->ZB5 = 0.0;
 
-    /* Fcn: '<S7>/XB6' incorporates:
-     *  Constant: '<S4>/Constant'
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/XB6' incorporates:
+     *  Constant: '<S5>/Constant'
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->XB6 = (2.0 * 1200.0 + 210.0) * 0.28867513459481287;
 
-    /* Fcn: '<S7>/YB6' incorporates:
-     *  Constant: '<S4>/Constant1'
+    /* Fcn: '<S8>/YB6' incorporates:
+     *  Constant: '<S5>/Constant1'
      */
     c_coder_B->YB6 = -0.5 * 210.0;
 
-    /* Fcn: '<S7>/ZB6' */
+    /* Fcn: '<S8>/ZB6' */
     c_coder_B->ZB6 = 0.0;
 
-    /* Fcn: '<S7>/CL6' */
+    /* Fcn: '<S8>/CL6' */
     tmp = c_coder_B->XT4 - c_coder_B->XB6;
     tmp_idx_1 = rt_powd_snf(tmp, 2.0);
     tmp_0 = c_coder_B->YT4 - c_coder_B->YB6;
@@ -705,25 +711,25 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       tmp_idx_1 = sqrt(tmp_idx_1);
     }
 
-    /* Fcn: '<S7>/CL6' */
+    /* Fcn: '<S8>/CL6' */
     c_coder_B->CL6 = tmp_idx_1;
 
-    /* Sum: '<S7>/Add5' incorporates:
-     *  Constant: '<S4>/Constant4'
+    /* Sum: '<S8>/Add5' incorporates:
+     *  Constant: '<S5>/Constant4'
      */
     c_coder_B->Add5 = c_coder_B->CL6 - 750.0;
 
-    /* Product: '<S7>/Divide5' incorporates:
-     *  Constant: '<S4>/Constant6'
+    /* Product: '<S8>/Divide5' incorporates:
+     *  Constant: '<S5>/Constant6'
      */
     c_coder_B->Divide5 = c_coder_B->Add5 * 10.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
-      /* Product: '<S5>/Divide4' incorporates:
-       *  Constant: '<S5>/Constant6'
+      /* Product: '<S6>/Divide4' incorporates:
+       *  Constant: '<S6>/Constant6'
        */
       c_coder_B->Divide4 = c_coder_B->Divide5 / 256.0;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion16' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion16' */
       tmp = floor(c_coder_B->Divide4);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -731,14 +737,14 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion16' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion16' */
       c_coder_B->DataTypeConversion16 = (int8_T)(tmp < 0.0 ? (int32_T)(int8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(int8_T)(uint8_T)tmp);
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion17' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion17' */
       c_coder_B->DataTypeConversion17 = (uint8_T)c_coder_B->DataTypeConversion16;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion15' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion15' */
       tmp = floor(c_coder_B->Divide5);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -746,12 +752,12 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion15' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion15' */
       c_coder_B->DataTypeConversion15 = (uint8_T)(tmp < 0.0 ? (int32_T)(uint8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
     }
 
-    /* Fcn: '<S7>/CL1' */
+    /* Fcn: '<S8>/CL1' */
     tmp = c_coder_B->XT3 - c_coder_B->XB1;
     tmp_idx_1 = rt_powd_snf(tmp, 2.0);
     tmp_0 = c_coder_B->YT3 - c_coder_B->YB1;
@@ -765,25 +771,25 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       tmp_idx_1 = sqrt(tmp_idx_1);
     }
 
-    /* Fcn: '<S7>/CL1' */
+    /* Fcn: '<S8>/CL1' */
     c_coder_B->CL1 = tmp_idx_1;
 
-    /* Sum: '<S7>/Add' incorporates:
-     *  Constant: '<S4>/Constant4'
+    /* Sum: '<S8>/Add' incorporates:
+     *  Constant: '<S5>/Constant4'
      */
     c_coder_B->Add = c_coder_B->CL1 - 750.0;
 
-    /* Product: '<S7>/Divide' incorporates:
-     *  Constant: '<S4>/Constant6'
+    /* Product: '<S8>/Divide' incorporates:
+     *  Constant: '<S5>/Constant6'
      */
     c_coder_B->Divide = c_coder_B->Add * 10.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
-      /* Product: '<S5>/Divide1' incorporates:
-       *  Constant: '<S5>/Constant7'
+      /* Product: '<S6>/Divide1' incorporates:
+       *  Constant: '<S6>/Constant7'
        */
       c_coder_B->Divide1 = c_coder_B->Divide / 256.0;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion18' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion18' */
       tmp = floor(c_coder_B->Divide1);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -791,15 +797,15 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion18' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion18' */
       c_coder_B->DataTypeConversion18 = (int8_T)(tmp < 0.0 ? (int32_T)(int8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(int8_T)(uint8_T)tmp);
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion4' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion4' */
       c_coder_B->DataTypeConversion4_e = (uint8_T)
         c_coder_B->DataTypeConversion18;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion2' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion2' */
       tmp = floor(c_coder_B->Divide);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -807,12 +813,12 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion2' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion2' */
       c_coder_B->DataTypeConversion2 = (uint8_T)(tmp < 0.0 ? (int32_T)(uint8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
     }
 
-    /* Fcn: '<S7>/CL2' */
+    /* Fcn: '<S8>/CL2' */
     tmp = c_coder_B->XT2 - c_coder_B->XB2;
     tmp_idx_1 = rt_powd_snf(tmp, 2.0);
     tmp_0 = c_coder_B->YT2 - c_coder_B->YB2;
@@ -826,25 +832,25 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       tmp_idx_1 = sqrt(tmp_idx_1);
     }
 
-    /* Fcn: '<S7>/CL2' */
+    /* Fcn: '<S8>/CL2' */
     c_coder_B->CL2 = tmp_idx_1;
 
-    /* Sum: '<S7>/Add1' incorporates:
-     *  Constant: '<S4>/Constant4'
+    /* Sum: '<S8>/Add1' incorporates:
+     *  Constant: '<S5>/Constant4'
      */
     c_coder_B->Add1 = c_coder_B->CL2 - 750.0;
 
-    /* Product: '<S7>/Divide1' incorporates:
-     *  Constant: '<S4>/Constant6'
+    /* Product: '<S8>/Divide1' incorporates:
+     *  Constant: '<S5>/Constant6'
      */
     c_coder_B->Divide1_a = c_coder_B->Add1 * 10.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
-      /* Product: '<S5>/Divide2' incorporates:
-       *  Constant: '<S5>/Constant9'
+      /* Product: '<S6>/Divide2' incorporates:
+       *  Constant: '<S6>/Constant9'
        */
       c_coder_B->Divide2 = c_coder_B->Divide1_a / 256.0;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion24' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion24' */
       tmp = floor(c_coder_B->Divide2);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -852,14 +858,14 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion24' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion24' */
       c_coder_B->DataTypeConversion24 = (int8_T)(tmp < 0.0 ? (int32_T)(int8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(int8_T)(uint8_T)tmp);
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion20' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion20' */
       c_coder_B->DataTypeConversion20 = (uint8_T)c_coder_B->DataTypeConversion24;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion19' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion19' */
       tmp = floor(c_coder_B->Divide1_a);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -867,12 +873,12 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion19' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion19' */
       c_coder_B->DataTypeConversion19 = (uint8_T)(tmp < 0.0 ? (int32_T)(uint8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
     }
 
-    /* Fcn: '<S7>/CL3' */
+    /* Fcn: '<S8>/CL3' */
     tmp = c_coder_B->XT1 - c_coder_B->XB3;
     tmp_idx_1 = rt_powd_snf(tmp, 2.0);
     tmp_0 = c_coder_B->YT1 - c_coder_B->YB3;
@@ -886,25 +892,25 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       tmp_idx_1 = sqrt(tmp_idx_1);
     }
 
-    /* Fcn: '<S7>/CL3' */
+    /* Fcn: '<S8>/CL3' */
     c_coder_B->CL3 = tmp_idx_1;
 
-    /* Sum: '<S7>/Add2' incorporates:
-     *  Constant: '<S4>/Constant4'
+    /* Sum: '<S8>/Add2' incorporates:
+     *  Constant: '<S5>/Constant4'
      */
     c_coder_B->Add2 = c_coder_B->CL3 - 750.0;
 
-    /* Product: '<S7>/Divide2' incorporates:
-     *  Constant: '<S4>/Constant6'
+    /* Product: '<S8>/Divide2' incorporates:
+     *  Constant: '<S5>/Constant6'
      */
     c_coder_B->Divide2_f = c_coder_B->Add2 * 10.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
-      /* Product: '<S5>/Divide3' incorporates:
-       *  Constant: '<S5>/Constant16'
+      /* Product: '<S6>/Divide3' incorporates:
+       *  Constant: '<S6>/Constant16'
        */
       c_coder_B->Divide3 = c_coder_B->Divide2_f / 256.0;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion25' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion25' */
       tmp = floor(c_coder_B->Divide3);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -912,14 +918,14 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion25' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion25' */
       c_coder_B->DataTypeConversion25 = (int8_T)(tmp < 0.0 ? (int32_T)(int8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(int8_T)(uint8_T)tmp);
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion22' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion22' */
       c_coder_B->DataTypeConversion22 = (uint8_T)c_coder_B->DataTypeConversion25;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion21' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion21' */
       tmp = floor(c_coder_B->Divide2_f);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -927,12 +933,12 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion21' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion21' */
       c_coder_B->DataTypeConversion21 = (uint8_T)(tmp < 0.0 ? (int32_T)(uint8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
     }
 
-    /* Fcn: '<S7>/CL4' */
+    /* Fcn: '<S8>/CL4' */
     tmp = c_coder_B->XT6 - c_coder_B->XB4;
     tmp_idx_1 = rt_powd_snf(tmp, 2.0);
     tmp_0 = c_coder_B->YT6 - c_coder_B->YB4;
@@ -946,25 +952,25 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       tmp_idx_1 = sqrt(tmp_idx_1);
     }
 
-    /* Fcn: '<S7>/CL4' */
+    /* Fcn: '<S8>/CL4' */
     c_coder_B->CL4 = tmp_idx_1;
 
-    /* Sum: '<S7>/Add3' incorporates:
-     *  Constant: '<S4>/Constant4'
+    /* Sum: '<S8>/Add3' incorporates:
+     *  Constant: '<S5>/Constant4'
      */
     c_coder_B->Add3 = c_coder_B->CL4 - 750.0;
 
-    /* Product: '<S7>/Divide3' incorporates:
-     *  Constant: '<S4>/Constant6'
+    /* Product: '<S8>/Divide3' incorporates:
+     *  Constant: '<S5>/Constant6'
      */
     c_coder_B->Divide3_f = c_coder_B->Add3 * 10.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
-      /* Product: '<S5>/Divide5' incorporates:
-       *  Constant: '<S5>/Constant18'
+      /* Product: '<S6>/Divide5' incorporates:
+       *  Constant: '<S6>/Constant18'
        */
       c_coder_B->Divide5_f = c_coder_B->Divide3_f / 256.0;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion26' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion26' */
       tmp = floor(c_coder_B->Divide5_f);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -972,15 +978,15 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion26' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion26' */
       c_coder_B->DataTypeConversion26 = (int8_T)(tmp < 0.0 ? (int32_T)(int8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(int8_T)(uint8_T)tmp);
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion7' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion7' */
       c_coder_B->DataTypeConversion7_i = (uint8_T)
         c_coder_B->DataTypeConversion26;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion23' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion23' */
       tmp = floor(c_coder_B->Divide3_f);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -988,12 +994,12 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion23' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion23' */
       c_coder_B->DataTypeConversion23 = (uint8_T)(tmp < 0.0 ? (int32_T)(uint8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
     }
 
-    /* Fcn: '<S7>/CL5' */
+    /* Fcn: '<S8>/CL5' */
     tmp = c_coder_B->XT5 - c_coder_B->XB5;
     tmp_idx_1 = rt_powd_snf(tmp, 2.0);
     tmp_0 = c_coder_B->YT5 - c_coder_B->YB5;
@@ -1007,25 +1013,25 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
       tmp_idx_1 = sqrt(tmp_idx_1);
     }
 
-    /* Fcn: '<S7>/CL5' */
+    /* Fcn: '<S8>/CL5' */
     c_coder_B->CL5 = tmp_idx_1;
 
-    /* Sum: '<S7>/Add4' incorporates:
-     *  Constant: '<S4>/Constant4'
+    /* Sum: '<S8>/Add4' incorporates:
+     *  Constant: '<S5>/Constant4'
      */
     c_coder_B->Add4 = c_coder_B->CL5 - 750.0;
 
-    /* Product: '<S7>/Divide4' incorporates:
-     *  Constant: '<S4>/Constant6'
+    /* Product: '<S8>/Divide4' incorporates:
+     *  Constant: '<S5>/Constant6'
      */
     c_coder_B->Divide4_h = c_coder_B->Add4 * 10.0;
     if (rtmIsMajorTimeStep(c_coder_M)) {
-      /* Product: '<S5>/Divide6' incorporates:
-       *  Constant: '<S5>/Constant21'
+      /* Product: '<S6>/Divide6' incorporates:
+       *  Constant: '<S6>/Constant21'
        */
       c_coder_B->Divide6 = c_coder_B->Divide4_h / 256.0;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion27' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion27' */
       tmp = floor(c_coder_B->Divide6);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -1033,14 +1039,14 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion27' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion27' */
       c_coder_B->DataTypeConversion27 = (int8_T)(tmp < 0.0 ? (int32_T)(int8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(int8_T)(uint8_T)tmp);
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion13' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion13' */
       c_coder_B->DataTypeConversion13 = (uint8_T)c_coder_B->DataTypeConversion27;
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion10' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion10' */
       tmp = floor(c_coder_B->Divide4_h);
       if (rtIsNaN(tmp) || rtIsInf(tmp)) {
         tmp = 0.0;
@@ -1048,7 +1054,7 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
         tmp = fmod(tmp, 256.0);
       }
 
-      /* DataTypeConversion: '<S5>/Data Type Conversion10' */
+      /* DataTypeConversion: '<S6>/Data Type Conversion10' */
       c_coder_B->DataTypeConversion10 = (uint8_T)(tmp < 0.0 ? (int32_T)(uint8_T)
         -(int8_T)(uint8_T)-tmp : (int32_T)(uint8_T)tmp);
 
@@ -1220,10 +1226,13 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
 
     /* End of Saturate: '<Root>/Saturation5' */
 
+    /* Gain: '<S4>/Gain5' */
+    c_coder_B->Gain5_d = 0.1 * c_coder_B->Saturation5;
+
     /* Sum: '<Root>/Sum3' incorporates:
      *  Constant: '<Root>/Constant2'
      */
-    c_coder_B->Sum3 = c_coder_B->Saturation5 + 1100.0;
+    c_coder_B->Sum3 = c_coder_B->Gain5_d + 1100.0;
 
     /* DataTypeConversion: '<Root>/Cast' incorporates:
      *  Inport: '<Root>/Inport'
@@ -1269,7 +1278,7 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
     c_coder_B->Gain_i = 1000.0 * c_coder_B->accy;
 
     /* Gain: '<S2>/Gain1' */
-    c_coder_B->Gain1 = 1000.0 * c_coder_B->accz;
+    c_coder_B->Gain1_m = 1000.0 * c_coder_B->accz;
 
     /* DataTypeConversion: '<Root>/Data Type Conversion3' incorporates:
      *  Inport: '<Root>/Inport2'
@@ -1322,7 +1331,7 @@ void c_coder_step(RT_MODEL_c_coder_T *const c_coder_M, real_T c_coder_U_Inport,
     c_coder_B->TransferFcn4 = 0.0;
     c_coder_B->TransferFcn4 += (-0.62831853071795862) *
       c_coder_X->TransferFcn4_CSTATE;
-    c_coder_B->TransferFcn4 += 1.0 * c_coder_B->Gain1;
+    c_coder_B->TransferFcn4 += 1.0 * c_coder_B->Gain1_m;
 
     /* TransferFcn: '<Root>/Transfer Fcn5' */
     c_coder_B->TransferFcn5 = 0.0;
@@ -1525,7 +1534,7 @@ void c_coder_derivatives(RT_MODEL_c_coder_T *const c_coder_M)
   _rtXdot->TransferFcn4_CSTATE = 0.0;
   _rtXdot->TransferFcn4_CSTATE += (-0.62831853071795862) *
     c_coder_X->TransferFcn4_CSTATE;
-  _rtXdot->TransferFcn4_CSTATE += c_coder_B->Gain1;
+  _rtXdot->TransferFcn4_CSTATE += c_coder_B->Gain1_m;
 
   /* Derivatives for TransferFcn: '<Root>/Transfer Fcn5' */
   _rtXdot->TransferFcn5_CSTATE = 0.0;
