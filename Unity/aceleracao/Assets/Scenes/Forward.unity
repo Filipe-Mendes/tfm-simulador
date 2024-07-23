@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11030,7 +11030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43296d017008d0345b057d5e58c22576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showUI: 0
+  showUI: 1
   canvasUI: {fileID: 463301758}
   errorUI: {fileID: 1880057134}
   driverUI: {fileID: 358299885}
@@ -11043,13 +11043,14 @@ MonoBehaviour:
   vrRig: {fileID: 292105214}
   handsVisualizer: {fileID: 1998968104}
   drivingMode: 2
-  freeRideEnvironment: {fileID: 1327774265}
+  freeRideEnvironment: {fileID: 892368797}
   testingEnvironment: {fileID: 1021258935}
   speedBumps: {fileID: 1479345463}
   wall: {fileID: 1216310684}
   curb: {fileID: 610448906}
+  trees: {fileID: 938844206}
   toLog: 1
-  toConnect: 0
+  toConnect: 1
   loggerObject: {fileID: 309237447}
   calibratorObject: {fileID: 1091610315}
   toCalibrate: 0
@@ -17856,6 +17857,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 885388431}
   m_CullTransparentMesh: 1
+--- !u!1001 &888937242
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1479345464}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 27.250002
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.29132235
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.1248116
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 82.12454
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_Name
+      value: lomba (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 979705184}
+  m_SourcePrefab: {fileID: 100100000, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
 --- !u!1 &892368797
 GameObject:
   m_ObjectHideFlags: 0
@@ -18554,7 +18627,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &938844207
 Transform:
   m_ObjectHideFlags: 0
@@ -19660,6 +19733,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 979665939}
   m_CullTransparentMesh: 1
+--- !u!1 &979705182 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+  m_PrefabInstance: {fileID: 888937242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &979705183 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
+  m_PrefabInstance: {fileID: 888937242}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &979705184
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979705182}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: c88d92e6c3276084baaeedc2f4cc8e64, type: 3}
 --- !u!1 &983710139
 GameObject:
   m_ObjectHideFlags: 0
@@ -21203,8 +21308,8 @@ MonoBehaviour:
   speedBump1: {fileID: 110290743}
   hardcodedStoppingPoint: 100
   centerOfMass: {fileID: 1363496181}
-  motorForce: 600
-  brakeForce: 100
+  motorForce: 6000
+  brakeForce: 20000
   maxSteerAngle: 30
   wheelColliders:
   - {fileID: 1688825197}
@@ -27631,6 +27736,7 @@ Transform:
   - {fileID: 404487936}
   - {fileID: 110290747}
   - {fileID: 1924821152}
+  - {fileID: 979705183}
   m_Father: {fileID: 1021258936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1479741119

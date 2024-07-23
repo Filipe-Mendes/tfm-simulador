@@ -15,6 +15,8 @@ using System.Threading;
 public class VehicleController : MonoBehaviour
 {
 
+
+
     /*     [SerializeField] private float defaultDrag = 0.1f;
         [SerializeField] private float maxDrag = 3f;
         [SerializeField] private float dragIncreaseRate = 0.5f;
@@ -364,33 +366,9 @@ public class VehicleController : MonoBehaviour
     // public float brakeSmoothFactor = 0.1f;  // Smoothing factor for brake force
     // private float smoothedBrakeForce = 0f;  // Store the smoothed brake force
 
-    /* private int springAcc = 35000;
-    private int damperAcc = 4500;
-    
-    private JointSpring suspensionSpring;
-
-    [SerializeField] private int brakeFactor = 10;  */
-
 
     private void ApplyBraking()
     {
-        /*         suspensionSpring = wheelColliders[0].suspensionSpring;
-
-                if((currentbrakeForce != 0 || acceleratorInput == 0) && rb.velocity.z < 0.25){
-                    Debug.Log("factor true");
-                    suspensionSpring.spring = springAcc * brakeFactor;
-                    suspensionSpring.damper = damperAcc * brakeFactor;
-
-                    for (int i = 0; i < 4; i++) wheelColliders[i].suspensionSpring = suspensionSpring; 
-
-                } else {
-                    Debug.Log("factor false");
-
-                    suspensionSpring.spring = springAcc;
-                    suspensionSpring.damper = damperAcc;
-
-                    for (int i = 0; i < 4; i++) wheelColliders[i].suspensionSpring = suspensionSpring; 
-                } */
 
         foreach (WheelCollider wheel in wheelColliders)
         {
@@ -437,4 +415,11 @@ public class VehicleController : MonoBehaviour
     {
         return smoothedBrakeInput;
     }
+
+    public float GetSteerInput()
+    {
+        return steerInput;
+    }
+
+
 }

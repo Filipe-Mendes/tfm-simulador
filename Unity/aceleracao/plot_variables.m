@@ -3,12 +3,13 @@ comma2point_overwrite('log_position.txt');
 comma2point_overwrite('log_acceleration.txt');
 comma2point_overwrite('log_velocity.txt');
 comma2point_overwrite('log_rotation.txt');
-
+comma2point_overwrite('log_input.txt');
 %% Read log files
 position = load('log_position.txt');
 velocity = load('log_velocity.txt');
 acceleration = load('log_acceleration.txt');
 rotation = load('log_rotation.txt');
+input = load('log_input.txt');
 
 %comma2point_overwrite('log_torque.txt');
 %torque = load('log_torque.txt');
@@ -59,6 +60,19 @@ legend([z1,z2,z3], [LZ1, LZ2, LZ3]);
 xlabel('Time')
 ylabel('Z value')
 ylim([min_y max_y])
+title('Z value / Time')
+
+%% Input
+figure('name','Input');
+z1 = plot(position(:,t),input(:,2)); LZ1 = "Acceleration Input";
+hold on
+z2 = plot(position(:,t),input(:,3)); LZ2 = "Brake Input";
+z3 = plot(position(:,t),input(:,4)); LZ3 = "Steer Input";
+hold off
+legend([z1,z2,z3], [LZ1, LZ2, LZ3]);
+xlabel('Time')
+ylabel('Z value')
+ylim([-1.5 1.5])
 title('Z value / Time')
 
 %% Torque

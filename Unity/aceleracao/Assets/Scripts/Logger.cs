@@ -8,6 +8,10 @@ using UnityEngine;
 public class Logger : MonoBehaviour
 {
 
+    private List<float> accArr = new List<float>();
+    private List<float> brArr = new List<float>();
+    private List<float> stArr = new List<float>();
+
     private VehicleController vehicleController;
 
     // Vehicle
@@ -165,26 +169,15 @@ public class Logger : MonoBehaviour
             }
         }
 
-        /* using (StreamWriter sw = new StreamWriter("./log_torque.txt"))
+        using (StreamWriter sw = new StreamWriter("./log_input.txt"))
         {
             int i = 0;
-            foreach (float v in motorTorqueArr)
+            foreach (float v in timeArr)
             {
-                sw.WriteLine(timeArr[i] + " " + v + "\n");
-                // sw.WriteLine(timeArr[i] + " " + to + "\n");
+                sw.WriteLine(v + " " + accArr[i] + " " + brArr[i] + " " + stArr[i] + "\n");
                 i++;
             }
-        } */
-        /*         using (StreamWriter sw = new StreamWriter("./log_suspension.txt"))
-                {
-                    int i = 0;
-                    foreach (float v in timeArr)
-                    {
-                        sw.WriteLine(v + " " + rearSuspension[i] + " " + rearSuspension1[i] + " " + frontSuspension[i] + " " + frontSuspension1[i] + "\n");
-                        // sw.WriteLine(timeArr[i] + " " + to + "\n");
-                        i++;
-                    }
-                } */
+        }
     }
 
     private Vector3 avgAcc;
@@ -274,6 +267,10 @@ public class Logger : MonoBehaviour
         t += (int)(Time.fixedDeltaTime * 1000);
 
         Debug.Log("acc :" + acceleration);
+
+        accArr.Add(vehicleController.GetAcceleratorInput());
+        brArr.Add(vehicleController.GetBrakeInput());
+        stArr.Add(vehicleController.GetSteerInput());
     }
 
     private string QueueToString(Queue<Vector3> queue, int coordinate)
