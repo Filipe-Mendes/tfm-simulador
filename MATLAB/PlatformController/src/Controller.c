@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
 
                 iResults = recv(ClientSocket, recvbuf, recvbuflen, 0);
                 if (iResults > 0 || !connected) {
-                    printf("Bytes received: %d  | ", iResults);
+                    printf("\n Bytes received: %d  | ", iResults);
                     memcpy(simValues, recvbuf, sizeof(simValues));
 
                     if (!connected) {
@@ -218,18 +218,18 @@ int main(int argc, char **argv) {
                     }
 
 
-                    printf("Input: %.6f, %.6f, %.6f, %.6f, %.6f, %.6f \n", simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
+                    // printf("Input: %.6f, %.6f, %.6f, %.6f, %.6f, %.6f \n", simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
 
                     // LOOP DO SIMULINK
                     step(c_coder_M, simValues[0], simValues[1], simValues[2], simValues[3], simValues[4], simValues[5]);
                     uint8_T *outp = getOutput();
 
                     int outputLength = 25;
-                    printf("Output: ");
+/*                     printf("Output: ");
                     for (int i = 0; i < outputLength; ++i) {
                         printf("%u ", outp[i]);
                     }
-                    printf("\n");
+                    printf("\n"); */
 
 
                     if(!MOCK){
@@ -254,7 +254,7 @@ int main(int argc, char **argv) {
                     WSACleanup();
                     return 1;
                 }
-                usleep(20000); // TODO: TO BE TESTED
+                // usleep(20000); // TODO: TO BE TESTED
             // } while (iResults > 0 || initialZeros);
             } while (true);
 
