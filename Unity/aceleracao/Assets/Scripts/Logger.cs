@@ -18,6 +18,7 @@ public class Logger : MonoBehaviour
     private Vector3 jerk;
     private Vector3 acceleration;
     private Vector3 lastAcceleration;
+    private Vector3 lastAccelerationNoAvg;
     private Vector3 currentVelocity;
     private Vector3 lastVelocity;
     private Vector3 lastPosition;
@@ -36,17 +37,6 @@ public class Logger : MonoBehaviour
     private List<int> timeArr = new List<int>();
     private int t = 0;
 
-    /*
-    private List<Vector3> motorTorqueArr = new List<Vector3>();
-    private List<float> motorTorqueArr = new List<float>();
-    private List<float> frontSuspension = new List<float>();
-    private List<float> frontSuspension1 = new List<float>();
-    private List<float> rearSuspension = new List<float>();
-    private List<float> rearSuspension1 = new List<float>(); 
-    */
-
-
-
     private long timeStart;
     private long timeEnd;
 
@@ -55,32 +45,6 @@ public class Logger : MonoBehaviour
     private bool connected = false;
     [SerializeField] private GameObject platformInterfaceObject;
     private PlatformInterface platformInterface;
-
-    [SerializeField] private bool clamping = true;
-    [SerializeField] private bool invertXZ = false;
-    [SerializeField] private bool sendHarcoded = false;
-    private float[][] hardcodedData;
-    private int index = 0;
-
-    public enum File_Mode
-    {
-        Straight_line_drag,
-        Straight_line_brake,
-        Speed_bump,
-        Curve,
-        Side_tilt
-    }
-    [SerializeField] public File_Mode file;
-
-    private static Dictionary<File_Mode, string> hardcodedFiles = new Dictionary<File_Mode, string>
-    {
-        { File_Mode.Straight_line_brake, "straight_line_brake_hardcoded.txt" },
-        { File_Mode.Straight_line_drag, "straight_line_drag_hardcoded.txt" },
-        { File_Mode.Speed_bump, "speed_bump_hardcoded.txt" },
-        { File_Mode.Curve, "curve_hardcoded.txt" },
-        { File_Mode.Side_tilt, "side_tilt_hardcoded.txt" }
-    };
-
 
     void Start()
     {
@@ -96,29 +60,11 @@ public class Logger : MonoBehaviour
 
         rb.sleepThreshold = 0.0f;
 
-        if (sendHarcoded)
-        {
-            string path = Application.dataPath + "/HardcodedAcceleration/";
-
-            accelerationArr = LoadFileIntoListVector3(path + "acceleration_" + hardcodedFiles[file]);
-            rotationArr = LoadFileIntoListQuaternion(path + "rotation_" + hardcodedFiles[file]);
-            Debug.Log("acc count: " + accelerationArr.Count + " || rot count: " + rotationArr.Count);
-            if (accelerationArr.Count != rotationArr.Count)
-            {
-                Debug.Log("Acceleration and rotation files do not have the same size");
-                UnityEditor.EditorApplication.isPlaying = false;
-            }
-        }
     }
 
     void FixedUpdate()
     {
-        if (sendHarcoded)
-        {
-            if (index < accelerationArr.Count) ParseHardcodedValues();
-            else UnityEditor.EditorApplication.isPlaying = false;
-        }
-        else CalculateValues();
+        CalculateValues();
 
         if (connected) SendValues();
     }
@@ -131,7 +77,7 @@ public class Logger : MonoBehaviour
     private void OnApplicationQuit()
     {
         timeEnd = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        if (!sendHarcoded) SaveArraysToFile();
+        SaveArraysToFile();
     }
 
     private void SendValues()
@@ -243,20 +189,23 @@ public class Logger : MonoBehaviour
 
     private Vector3 avgAcc;
     [SerializeField] private bool averageAcceleration = true;
-    [SerializeField] private int windowSize = 5;
-    private int windowSizeAdjustment = 0;
-    [SerializeField] private int maxIncreaseAcceleration = 5;
+    [SerializeField] private int maxWindowSize = 5;
+    private int currentWindowSize = 0;
+    [SerializeField] private int maxIncreaseAcceleration = 7;
     private int accCount = 0;
     private Queue<Vector3> window = new Queue<Vector3>();
 
-    private Vector3 QueueSum(Queue<Vector3> queue){
+    private Vector3 QueueSum(Queue<Vector3> queue)
+    {
         Vector3 sum = new Vector3();
-        foreach(Vector3 ac in queue){
+        foreach (Vector3 ac in queue)
+        {
             sum += ac;
-        }    
+        }
         return sum;
     }
 
+    private bool firstValue = false;
     private void CalculateValues()
     {
         accCount++;
@@ -267,44 +216,54 @@ public class Logger : MonoBehaviour
         acceleration = (currentVelocity - lastVelocity) / Time.fixedDeltaTime;
 
         // Ignore spikes in acceleration
-        Vector3 absoluteAcc = new Vector3(Mathf.Abs(acceleration.x),Mathf.Abs(acceleration.y),Mathf.Abs(acceleration.z));
-        Vector3 absoluteLastAcc = new Vector3(Mathf.Abs(lastAcceleration.x),Mathf.Abs(lastAcceleration.y),Mathf.Abs(lastAcceleration.z));
+        Vector3 absoluteAcc = new Vector3(Mathf.Abs(acceleration.x), Mathf.Abs(acceleration.y), Mathf.Abs(acceleration.z));
+        Vector3 absoluteLastAcc = new Vector3(Mathf.Abs(lastAcceleration.x), Mathf.Abs(lastAcceleration.y), Mathf.Abs(lastAcceleration.z));
+        Vector3 accDifference = acceleration - lastAccelerationNoAvg;
+        // Vector3 accDifference = acceleration - lastAcceleration;
+        Debug.Log("diff: " + accDifference);
 
-        Vector3 accDifference = acceleration - lastAcceleration;
+        bool spike = false;
+        Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
 
-        if(acceleration != Vector3.zero){
-            Debug.Log("Don't enqueue 1");
-            if (accDifference.x >  maxIncreaseAcceleration  || 
-                accDifference.y >  maxIncreaseAcceleration  || 
-                accDifference.z >  maxIncreaseAcceleration ){
-           /*  if (absoluteAcc.x > absoluteLastAcc.x * maxIncreaseAcceleration || 
-                absoluteAcc.y > absoluteLastAcc.y * maxIncreaseAcceleration || 
-                absoluteAcc.z > absoluteLastAcc.z * maxIncreaseAcceleration){ */
-                Debug.Log("Don't enqueue 2");
-                // Do not enqueue acceleration value
-                windowSizeAdjustment++;
-            } else {
-                Debug.Log("Enqueue");
-                window.Enqueue(acceleration);
-                windowSizeAdjustment = 0;
+        if (averageAcceleration)
+        {
+            if (acceleration.z > 0.01f || firstValue) 
+            {
+                firstValue = true;
+                // Check if value is a spike in acceleration and if it should be put in the queue
+                if (accDifference.x > maxIncreaseAcceleration || accDifference.y > maxIncreaseAcceleration || accDifference.z > maxIncreaseAcceleration) spike = true;
+
+                if (!spike)
+                {
+                    window.Enqueue(acceleration);
+                    currentWindowSize++;
+                }
             }
-        }   
 
+            Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
+            Debug.Log("time: " + accCount + " || spike: " + spike );
 
-        if(accCount > windowSize && averageAcceleration){
+            lastAccelerationNoAvg = acceleration;
 
-            avgAcc = QueueSum(window)/(windowSize - windowSizeAdjustment);
-            window.Dequeue();
-            acceleration = avgAcc;
+            // DEQUEUE THE FIRST VALUE IN THE QUEUE
+            if (currentWindowSize > 0)
+            {
+                avgAcc = QueueSum(window) / currentWindowSize;
+                if (currentWindowSize >= maxWindowSize)
+                {
+                    window.Dequeue();
+                    currentWindowSize--;
+                }
+                acceleration = avgAcc;
+            }
+            Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
         }
+
 
         lastAcceleration = acceleration;
 
         lastVelocity = currentVelocity;
         rotation = vehicle.transform.rotation;
-
-        // CLAMP VALUES IF VALUES EXCEED LIMITS
-        // if (clamping) ClampValues();
 
         positionArr.Add(currentPosition);
         lastVelocityArr.Add(currentVelocity);
@@ -317,21 +276,14 @@ public class Logger : MonoBehaviour
         Debug.Log("acc :" + acceleration);
     }
 
-    /* private void ClampValues()
+    private string QueueToString(Queue<Vector3> queue, int coordinate)
     {
-        if (vehicleController.GetBrakeInput() < 0.1 && vehicleController.GetAcceleratorInput() < 0.1 && currentVelocity.z < 0.5f)
+        string str = "";
+        foreach (Vector3 value in window)
         {
-            acceleration.x = Mathf.Clamp(acceleration.x, -1.0f, 1.0f);
-            acceleration.y = Mathf.Clamp(acceleration.y, -1.0f, 1.0f);
-            acceleration.z = Mathf.Clamp(acceleration.z, -1.0f, 1.0f);
+            str += value[coordinate] + " | ";
         }
-    } */
-
-    private void ParseHardcodedValues()
-    {
-        acceleration = accelerationArr[index];
-        rotation = rotationArr[index];
-        index++;
+        return str;
     }
 
     public void TryConnect()
@@ -341,86 +293,4 @@ public class Logger : MonoBehaviour
         connected = platformInterface.ConnectToPlatform();
     }
 
-    /*
-    Vector3 CalculateAverageWheelPosition()
-    {
-        Vector3 sum = Vector3.zero;
-        int childCount = 0;
-
-        foreach (Transform child in wheels.transform)
-        {
-            sum += wheels.transform.TransformPoint(child.localPosition); ;
-            childCount++;
-        }
-        Vector3 avg = sum / childCount;
-        Debug.Log("AVG: " + avg);
-        return avg;
-    }
-
-    public Vector3 Round(Vector3 vector3, int decimalPlaces)
-    {
-        float multiplier = 1;
-        for (int i = 0; i < decimalPlaces; i++)
-        {
-            multiplier *= 10f;
-        }
-        return new Vector3(
-            Mathf.Round(vector3.x * multiplier) / multiplier,
-            Mathf.Round(vector3.y * multiplier) / multiplier,
-            Mathf.Round(vector3.z * multiplier) / multiplier);
-    } 
-    */
-    public List<Vector3> LoadFileIntoListVector3(string path)
-    {
-        List<Vector3> list = new List<Vector3>();
-        try
-        {
-            string[] lines = File.ReadAllLines(path);
-
-            foreach (string line in lines)
-            {
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    string[] parts = line.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    Vector3 listLine = new Vector3(float.Parse(parts[1]), float.Parse(parts[2]), float.Parse(parts[3]));
-                    // Debug.Log("line: " + line + "|| listline: " + listLine);
-
-                    list.Add(listLine);
-                }
-            }
-            Debug.Log("Finished loading file");
-        }
-        catch (Exception e)
-        {
-            Debug.Log("An error occurred: " + e.Message);
-        }
-        return list;
-    }
-
-    public List<Quaternion> LoadFileIntoListQuaternion(string path)
-    {
-        List<Quaternion> list = new List<Quaternion>();
-        try
-        {
-            string[] lines = File.ReadAllLines(path);
-
-            foreach (string line in lines)
-            {
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    string[] parts = line.Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    Quaternion listLine = new Quaternion(float.Parse(parts[1]), float.Parse(parts[2]), float.Parse(parts[3]), float.Parse(parts[4]));
-                    // Debug.Log("line: " + line + "|| listline: " + listLine);
-
-                    list.Add(listLine);
-                }
-            }
-            Debug.Log("Finished loading file");
-        }
-        catch (Exception e)
-        {
-            Debug.Log("An error occurred: " + e.Message);
-        }
-        return list;
-    }
 }

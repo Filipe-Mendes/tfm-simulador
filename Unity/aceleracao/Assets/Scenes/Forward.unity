@@ -6186,10 +6186,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicle: {fileID: 1061391709}
   platformInterfaceObject: {fileID: 604642914}
-  clamping: 0
-  invertXZ: 0
-  sendHarcoded: 0
-  file: 0
+  averageAcceleration: 1
+  maxWindowSize: 5
+  maxIncreaseAcceleration: 5
 --- !u!4 &309237449
 Transform:
   m_ObjectHideFlags: 0
@@ -11043,7 +11042,7 @@ MonoBehaviour:
   sideCamera: {fileID: 197243937}
   vrRig: {fileID: 292105214}
   handsVisualizer: {fileID: 1998968104}
-  drivingMode: 1
+  drivingMode: 2
   freeRideEnvironment: {fileID: 1327774265}
   testingEnvironment: {fileID: 1021258935}
   speedBumps: {fileID: 1479345463}
@@ -28401,10 +28400,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vehicle: {fileID: 427651762}
   platformInterfaceObject: {fileID: 604642914}
-  clamping: 1
-  invertXZ: 0
-  sendHarcoded: 0
-  file: 0
+  averageAcceleration: 1
+  maxWindowSize: 5
+  maxIncreaseAcceleration: 5
 --- !u!4 &1540365673
 Transform:
   m_ObjectHideFlags: 0

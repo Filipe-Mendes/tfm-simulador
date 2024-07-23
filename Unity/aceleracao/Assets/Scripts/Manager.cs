@@ -30,6 +30,7 @@ public class Manager : MonoBehaviour
     [SerializeField] private GameObject speedBumps;
     [SerializeField] private GameObject wall;
     [SerializeField] private GameObject curb;
+    [SerializeField] private GameObject trees;
 
     // Logger
     [SerializeField] public bool toLog = false;
@@ -94,8 +95,12 @@ public class Manager : MonoBehaviour
         }
 
         switch (drivingMode){
+            case DRIVING_MODE.STRAIGHT_LINE:
+                trees.SetActive(true);
+                break;
             case DRIVING_MODE.SPEED_BUMP:
                 speedBumps.SetActive(true);
+                trees.SetActive(true);
                 break;
             case DRIVING_MODE.COLLISION:
                 wall.SetActive(true);
