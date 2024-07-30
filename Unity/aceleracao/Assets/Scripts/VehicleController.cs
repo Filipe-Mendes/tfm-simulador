@@ -169,13 +169,13 @@ public class VehicleController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        if (!waitOver)
+       /*  if (!waitOver)
         {
             Debug.Log("wait not over");
             if (DateTimeOffset.Now.ToUnixTimeMilliseconds() >= timeStart + waitingTime) waitOver = true;
-        }
+        } */
 
-        if (ready && waitOver)
+        if (ready)
         {
             if (mode != DRIVING_MODE.FREE) PerformTestScenario();
             else HandleInput();
@@ -183,6 +183,8 @@ public class VehicleController : MonoBehaviour
             HandleMotor();
             HandleSteering();
             UpdateWheels();
+            Debug.Log("SUSP 0: " + wheelColliders[0].suspensionDistance + " || SUSP 3: " + wheelColliders[3].suspensionDistance  + " || DRAG " + rb.drag + " || TORQUE: " + wheelColliders[0].motorTorque + " || TORQUE 3: " + wheelColliders[3].motorTorque + " || acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);   
+
         }
     }
 
@@ -227,30 +229,40 @@ public class VehicleController : MonoBehaviour
     public void PerformTestScenario()
     {
         // HARDCODED MOVEMENT
-
-        // STRAIGHT LINE
         if (mode == DRIVING_MODE.STRAIGHT_LINE)
+        {
+            if (rb.transform.position.z <= hardcodedStoppingPoint)
+            {
+                acceleratorInput = 1f;
+            } else {
+                acceleratorInput = 0f;
+            }
+        }
+        // STRAIGHT LINE
+        /* if (mode == DRIVING_MODE.STRAIGHT_LINE)
         {
 
             acceleratorInput = 1f;
-            if (rb.transform.position.z > hardcodedStoppingPoint / 2)
+            if (rb.transform.position.z > hardcodedStoppingPoint)
             {
+                rb.drag = 0.5f;
                 acceleratorInput = 0;
-                if (rb.transform.position.z > hardcodedStoppingPoint + 20)
+                // Debug.Log("DRAG " + rb.drag + " || TORQUE: " + wheelColliders[0].motorTorque + " || acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);   
+                /* if (rb.transform.position.z > hardcodedStoppingPoint + 20)
                 {
                     brakeInput = 1f;
                     smoothedBrakeInput = brakeInput;
                     isBraking = true;
-                }
-            }
-            Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);
-        }
+                } */
+            // }
+            // Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);
+        // } */
 
         // TODO: mode == DRIVING_MODE.COLLISION 
 
 
         // TODO: FINAL
-        if (mode == DRIVING_MODE.SIDE_TILT)
+        /* if (mode == DRIVING_MODE.SIDE_TILT)
         {
             acceleratorInput = 1;
             if (rb.transform.position.z > curbBegin / 2) acceleratorInput = 0;
@@ -335,7 +347,7 @@ public class VehicleController : MonoBehaviour
                 else steerInput = 1;
                 if (rb.transform.position.x > 60) isBraking = true;
             }
-        }
+        } */
     }
 
     private void HandleMotor()
@@ -346,11 +358,11 @@ public class VehicleController : MonoBehaviour
         if (reverse)
         {
             acceleratorInput = -acceleratorInput;
-            for (int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
+            for (int i = 0; i < 4; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
         }
         else
         {
-            for (int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
+            for (int i = 0; i < 4; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
         }
 
         currentbrakeForce = 0;
