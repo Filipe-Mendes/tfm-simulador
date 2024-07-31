@@ -12,14 +12,20 @@ public class CarControl : MonoBehaviour
     WheelControl[] wheels;
     Rigidbody rigidBody;
 
+    // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+
+        // Adjust center of mass vertically, to help prevent the car from rolling
         rigidBody.centerOfMass += Vector3.up * centreOfGravityOffset;
+
+        // Find all child GameObjects that have the WheelControl script attached
         wheels = GetComponentsInChildren<WheelControl>();
     }
 
-    void FixedUpdate()
+    // Update is called once per frame
+    void Update()
     {
 
         float vInput = Input.GetAxis("Vertical");
@@ -65,7 +71,6 @@ public class CarControl : MonoBehaviour
             }
             else
             {
-                Debug.Log("Braking");
                 // If the user is trying to go in the opposite direction
                 // apply brakes to all wheels
                 wheel.WheelCollider.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
@@ -73,47 +78,4 @@ public class CarControl : MonoBehaviour
             }
         }
     }
-
-    /* void FixedUpdate()
-    {
-
-        float vInput = Input.GetAxis("Vertical");
-        float hInput = Input.GetAxis("Horizontal");
-
-
-
-
-/*         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.velocity);
-        float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
-        float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
-        float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
-        bool isAccelerating = Mathf.Sign(vInput) == Mathf.Sign(forwardSpeed); */
-
-        /* foreach (var wheel in wheels)
-        {
-            if (wheel.steerable)
-            {
-                wheel.WheelCollider.steerAngle = hInput * steeringRange;
-            }
-            
-            if (vInput > 0)
-            {
-                Debug.Log("Accelerating");
-                // Apply torque to Wheel colliders that have "Motorized" enabled
-                if (wheel.motorized)
-                {
-                    wheel.WheelCollider.motorTorque = vInput * motorTorque;
-                }
-                wheel.WheelCollider.brakeTorque = 0;
-            }
-            else
-            {
-                Debug.Log("Braking");
-                // If the user is trying to go in the opposite direction
-                // apply brakes to all wheels
-                wheel.WheelCollider.brakeTorque = vInput * brakeTorque;
-                wheel.WheelCollider.motorTorque = 0;
-            }
-        } 
-    } */
 }
