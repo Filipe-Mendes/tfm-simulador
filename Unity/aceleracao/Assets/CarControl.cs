@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CarControl : MonoBehaviour
 {
+    [SerializeField] private bool forward = false;
     public float motorTorque = 2000;
     public float brakeTorque = 2000;
     public float maxSpeed = 20;
@@ -25,11 +26,23 @@ public class CarControl : MonoBehaviour
     }
 
     // Update is called once per frame
+    private float vInput;
+    private float hInput;
     void Update()
     {
 
-        float vInput = Input.GetAxis("Vertical");
-        float hInput = Input.GetAxis("Horizontal");
+        vInput = Input.GetAxis("Vertical");
+        hInput = Input.GetAxis("Horizontal");
+
+    
+        if (forward){
+            if (rigidBody.transform.position.z < 20){
+                vInput = 1;
+            } else vInput = 0;
+        }
+        
+        Debug.Log("v: " + vInput + " || pos: " + rigidBody.transform.position.z );
+
 
         // Calculate current speed in relation to the forward direction of the car
         // (this returns a negative number when traveling backwards)
@@ -77,5 +90,20 @@ public class CarControl : MonoBehaviour
                 wheel.WheelCollider.motorTorque = 0;
             }
         }
+    }
+
+    public float GetAcceleratorInput()
+    {
+        return vInput >= 0 ? vInput : 0;
+    }
+
+    public float GetBrakeInput()
+    {
+        return vInput <= 0 ? vInput : 0;
+    }
+
+    public float GetSteerInput()
+    {
+        return hInput;
     }
 }

@@ -25,9 +25,9 @@
                 },
                 {
                     "name": "Accelerator",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "d22da62d-839b-46ff-86fc-f62c612ec637",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -129,11 +129,11 @@
                 },
                 {
                     "name": "",
-                    "id": "5c0670ea-31de-4996-a9ed-f582d2af1cf6",
+                    "id": "bf5cac54-eed9-4756-9870-f1b843347494",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
+                    "groups": "",
                     "action": "Accelerator",
                     "isComposite": false,
                     "isPartOfComposite": false

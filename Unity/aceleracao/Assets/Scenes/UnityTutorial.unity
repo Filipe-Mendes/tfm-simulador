@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -309,7 +309,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1a7f60c632a960549a9e5144a9c32f82, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.218838
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a7f60c632a960549a9e5144a9c32f82, type: 3}
       propertyPath: m_LocalPosition.y
@@ -317,7 +317,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a7f60c632a960549a9e5144a9c32f82, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 80.55348
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1a7f60c632a960549a9e5144a9c32f82, type: 3}
       propertyPath: m_LocalRotation.w
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicle: {fileID: 1955649815}
-  offset: {x: 0, y: 10, z: -15}
+  offset: {x: 0, y: 3, z: -10}
 --- !u!1 &592050267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,6 +1019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c608a627b4af643966a39d8a7de2e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forward: 0
   motorTorque: 2000
   brakeTorque: 2000
   maxSpeed: 20

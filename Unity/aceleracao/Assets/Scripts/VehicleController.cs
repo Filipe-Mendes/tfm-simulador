@@ -25,8 +25,8 @@ public class VehicleController : MonoBehaviour
 
     private bool ready = false;
 
-    // [SerializeField] private Transform resetPos;
-    // [SerializeField] private GameObject driverPosition;
+    [SerializeField] private Transform resetPos;
+    [SerializeField] private GameObject driverPosition;
     [SerializeField] private Camera vrCamera;
 
     // Testing variables
@@ -150,7 +150,7 @@ public class VehicleController : MonoBehaviour
         ready = true;
     }
 
-    /*     private void UpdateDriverPosition()
+/*         private void UpdateDriverPosition()
         {
 
             float rotationAngleY = resetPos.rotation.eulerAngles.y - driverPosition.transform.rotation.eulerAngles.y;
@@ -184,7 +184,7 @@ public class VehicleController : MonoBehaviour
             HandleSteering();
             UpdateWheels();
             Debug.Log("SUSP 0: " + wheelColliders[0].suspensionDistance + " || SUSP 3: " + wheelColliders[3].suspensionDistance  + " || DRAG " + rb.drag + " || TORQUE: " + wheelColliders[0].motorTorque + " || TORQUE 3: " + wheelColliders[3].motorTorque + " || acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);   
-
+            // UpdateDriverPosition();
         }
     }
 
@@ -194,10 +194,16 @@ public class VehicleController : MonoBehaviour
     public float brakeSmoothFactor = 0.05f;  // Smoothing factor for brake input
     private float smoothedBrakeInput = 0f;  // Store the smoothed brake input
 
-
+    [SerializeField] private float smoothingAcc = 3f;
     private void HandleInput()
     {
-        acceleratorInput = acceleratorAction.ReadValue<float>();
+        // acceleratorInput = acceleratorAction.ReadValue<float>();
+
+
+        acceleratorInput += (acceleratorAction.ReadValue<float>() * smoothingAcc - 1f) * Time.deltaTime;
+        acceleratorInput = Mathf.Clamp01(acceleratorInput);
+
+
         brakeInput = brakeAction.ReadValue<float>();
 
         // smoothedBrakeInput = Mathf.Lerp(smoothedBrakeInput, brakeInput, brakeSmoothFactor);
@@ -358,11 +364,11 @@ public class VehicleController : MonoBehaviour
         if (reverse)
         {
             acceleratorInput = -acceleratorInput;
-            for (int i = 0; i < 4; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
+            for (int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * reverseMotorForce;
         }
         else
         {
-            for (int i = 0; i < 4; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
+            for (int i = 0; i < 2; i++) wheelColliders[i].motorTorque = acceleratorInput * motorForce;
         }
 
         currentbrakeForce = 0;

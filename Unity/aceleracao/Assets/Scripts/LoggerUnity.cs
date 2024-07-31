@@ -12,7 +12,7 @@ public class LoggerUnity : MonoBehaviour
     private List<float> brArr = new List<float>();
     private List<float> stArr = new List<float>();
 
-    private VehicleController vehicleController;
+    private CarControl vehicleController;
 
     // Vehicle
     [SerializeField] private GameObject vehicle;
@@ -60,7 +60,7 @@ public class LoggerUnity : MonoBehaviour
 
         timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-        vehicleController = vehicle.GetComponent<VehicleController>();
+        vehicleController = vehicle.GetComponent<CarControl>();
 
         rb.sleepThreshold = 0.0f;
 
@@ -169,6 +169,16 @@ public class LoggerUnity : MonoBehaviour
             }
         }
 
+        using (StreamWriter sw = new StreamWriter("./log_input.txt"))
+        {
+            int i = 0;
+            foreach (float v in timeArr)
+            {
+                sw.WriteLine(v + " " + accArr[i] + " " + brArr[i] + " " + stArr[i] + "\n");
+                i++;
+            }
+        }
+
 
     }
 
@@ -242,6 +252,10 @@ public class LoggerUnity : MonoBehaviour
                 acceleration = avgAcc;
             }
             Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
+
+            accArr.Add(vehicleController.GetAcceleratorInput());
+            brArr.Add(vehicleController.GetBrakeInput());
+            stArr.Add(vehicleController.GetSteerInput());
         }
 
 
