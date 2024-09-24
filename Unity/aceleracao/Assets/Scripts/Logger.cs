@@ -211,30 +211,41 @@ public class Logger : MonoBehaviour
         // Ignore spikes in acceleration
         Vector3 absoluteAcc = new Vector3(Mathf.Abs(acceleration.x), Mathf.Abs(acceleration.y), Mathf.Abs(acceleration.z));
         Vector3 absoluteLastAcc = new Vector3(Mathf.Abs(lastAcceleration.x), Mathf.Abs(lastAcceleration.y), Mathf.Abs(lastAcceleration.z));
-        Vector3 accDifference = acceleration - lastAccelerationNoAvg;
+        // Vector3 accDifference1 = acceleration - lastAccelerationNoAvg;
+        Vector3 accDifference = new Vector3(Mathf.Abs(acceleration.x-lastAcceleration.x),
+                                                Mathf.Abs(acceleration.y-lastAcceleration.y), 
+                                                Mathf.Abs(acceleration.z-lastAcceleration.z));
         // Vector3 accDifference = acceleration - lastAcceleration;
-        Debug.Log("diff: " + accDifference);
+        // Debug.Log("diff: " + accDifference);
 
         bool spike = false;
-        Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
+        // Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
 
         if (averageAcceleration)
         {
-            if (acceleration.z > 0.01f || firstValue) 
-            {
-                firstValue = true;
-                // Check if value is a spike in acceleration and if it should be put in the queue
-                if (accDifference.x > maxIncreaseAcceleration || accDifference.y > maxIncreaseAcceleration || accDifference.z > maxIncreaseAcceleration) spike = true;
-
-                if (!spike)
-                {
-                    window.Enqueue(acceleration);
-                    currentWindowSize++;
+            // if (acceleration.z > 0.01f || firstValue) 
+            // {
+            // firstValue = true;
+            // Check if value is a spike in acceleration and if it should be put in the queue
+            if (accDifference.x > maxIncreaseAcceleration ||
+                accDifference.y > maxIncreaseAcceleration ||
+                accDifference.z > maxIncreaseAcceleration){
+                    spike = true;
+                    Debug.Log("spikeee: " + accDifference);
                 }
-            }
+                
 
-            Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
-            Debug.Log("time: " + accCount + " || spike: " + spike );
+            Debug.Log("Spike: " + spike + " || " + accDifference);
+            if (!spike)
+            {
+                window.Enqueue(acceleration);
+                currentWindowSize++;
+            }
+            spike = false;
+            // }
+
+            // Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
+            // Debug.Log("time: " + accCount + " || spike: " + spike);
 
             lastAccelerationNoAvg = acceleration;
 
@@ -249,7 +260,7 @@ public class Logger : MonoBehaviour
                 }
                 acceleration = avgAcc;
             }
-            Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
+            // Debug.Log(accCount + " :: " + QueueToString(window, 2) + " :: spike: " + spike);
         }
 
 

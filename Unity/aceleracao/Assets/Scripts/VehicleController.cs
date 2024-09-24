@@ -16,17 +16,9 @@ public class VehicleController : MonoBehaviour
 {
 
 
-
-    /*     [SerializeField] private float defaultDrag = 0.1f;
-        [SerializeField] private float maxDrag = 3f;
-        [SerializeField] private float dragIncreaseRate = 0.5f;
-        [SerializeField] private float lowVelocityThreshold = 0.18f; */
-
-
     private bool ready = false;
 
-    [SerializeField] private Transform resetPos;
-    [SerializeField] private GameObject driverPosition;
+    // [SerializeField] private GameObject driverPosition;
     [SerializeField] private Camera vrCamera;
 
     // Testing variables
@@ -37,12 +29,6 @@ public class VehicleController : MonoBehaviour
 
 
 
-
-
-
-
-
-    // [SerializeField] private GameObject[] speedBumps;
     private int curbBegin = 50;
     private int curbEnd = 75;
 
@@ -102,7 +88,7 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private GameObject steeringWheel;
 
     private long timeStart;
-    private long waitingTime = 4000;
+    private long waitingTime = 1000;
     private bool waitOver = false;
 
 
@@ -127,7 +113,7 @@ public class VehicleController : MonoBehaviour
 
         rb.sleepThreshold = 0.0f;
 
-        timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        // timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
     }
 
@@ -148,9 +134,10 @@ public class VehicleController : MonoBehaviour
         }
 
         ready = true;
+        timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
-/*         private void UpdateDriverPosition()
+    /*     private void UpdateDriverPosition()
         {
 
             float rotationAngleY = resetPos.rotation.eulerAngles.y - driverPosition.transform.rotation.eulerAngles.y;
@@ -169,7 +156,7 @@ public class VehicleController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-       /*  if (!waitOver)
+        /* if (!waitOver)
         {
             Debug.Log("wait not over");
             if (DateTimeOffset.Now.ToUnixTimeMilliseconds() >= timeStart + waitingTime) waitOver = true;
@@ -183,8 +170,6 @@ public class VehicleController : MonoBehaviour
             HandleMotor();
             HandleSteering();
             UpdateWheels();
-            Debug.Log("SUSP 0: " + wheelColliders[0].suspensionDistance + " || SUSP 3: " + wheelColliders[3].suspensionDistance  + " || DRAG " + rb.drag + " || TORQUE: " + wheelColliders[0].motorTorque + " || TORQUE 3: " + wheelColliders[3].motorTorque + " || acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);   
-            // UpdateDriverPosition();
         }
     }
 
@@ -194,16 +179,10 @@ public class VehicleController : MonoBehaviour
     public float brakeSmoothFactor = 0.05f;  // Smoothing factor for brake input
     private float smoothedBrakeInput = 0f;  // Store the smoothed brake input
 
-    [SerializeField] private float smoothingAcc = 3f;
+
     private void HandleInput()
     {
-        // acceleratorInput = acceleratorAction.ReadValue<float>();
-
-
-        acceleratorInput += (acceleratorAction.ReadValue<float>() * smoothingAcc - 1f) * Time.deltaTime;
-        acceleratorInput = Mathf.Clamp01(acceleratorInput);
-
-
+        acceleratorInput = acceleratorAction.ReadValue<float>();
         brakeInput = brakeAction.ReadValue<float>();
 
         // smoothedBrakeInput = Mathf.Lerp(smoothedBrakeInput, brakeInput, brakeSmoothFactor);
@@ -235,125 +214,123 @@ public class VehicleController : MonoBehaviour
     public void PerformTestScenario()
     {
         // HARDCODED MOVEMENT
-        if (mode == DRIVING_MODE.STRAIGHT_LINE)
+
+        if (!waitOver)
         {
-            if (rb.transform.position.z <= hardcodedStoppingPoint)
+            if (DateTimeOffset.Now.ToUnixTimeMilliseconds() >= timeStart + waitingTime) waitOver = true;
+        }
+        if (waitOver)
+        {
+
+            // STRAIGHT LINE
+            if (mode == DRIVING_MODE.STRAIGHT_LINE)
             {
+
                 acceleratorInput = 1f;
-            } else {
-                acceleratorInput = 0f;
-            }
-        }
-        // STRAIGHT LINE
-        /* if (mode == DRIVING_MODE.STRAIGHT_LINE)
-        {
-
-            acceleratorInput = 1f;
-            if (rb.transform.position.z > hardcodedStoppingPoint)
-            {
-                rb.drag = 0.5f;
-                acceleratorInput = 0;
-                // Debug.Log("DRAG " + rb.drag + " || TORQUE: " + wheelColliders[0].motorTorque + " || acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);   
-                /* if (rb.transform.position.z > hardcodedStoppingPoint + 20)
+                if (rb.transform.position.z > hardcodedStoppingPoint / 2) //25
                 {
-                    brakeInput = 1f;
-                    smoothedBrakeInput = brakeInput;
+                    acceleratorInput = 0;
+                    if (rb.transform.position.z > hardcodedStoppingPoint + 20) //70
+                    {
+                        brakeInput = 1f;
+                        smoothedBrakeInput = brakeInput;
+                        isBraking = true;
+                    }
+                }
+                Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);
+            }
+
+            // TODO: mode == DRIVING_MODE.COLLISION 
+
+
+            // TODO: FINAL
+            if (mode == DRIVING_MODE.SIDE_TILT)
+            {
+                acceleratorInput = 1;
+                if (rb.transform.position.z > curbBegin / 2) acceleratorInput = 0;
+                if (rb.transform.position.z > curbEnd)
+                {
+                    brakeInput = 1;
                     isBraking = true;
-                } */
-            // }
-            // Debug.Log("acc: " + acceleratorInput + " || brake: " + brakeInput + " || pos.z: " + rb.transform.position.z);
-        // } */
+                }
+            }
 
-        // TODO: mode == DRIVING_MODE.COLLISION 
-
-
-        // TODO: FINAL
-        /* if (mode == DRIVING_MODE.SIDE_TILT)
-        {
-            acceleratorInput = 1;
-            if (rb.transform.position.z > curbBegin / 2) acceleratorInput = 0;
-            if (rb.transform.position.z > curbEnd)
+            // REVERSE
+            if (mode == DRIVING_MODE.REVERSE)
             {
-                brakeInput = 1;
-                isBraking = true;
+                reverse = true;
+                acceleratorInput = 1;
+                if (rb.transform.position.z < -hardcodedStoppingPoint / 3)
+                {
+                    acceleratorInput = 0;
+                    isBraking = true;
+                }
+            }
+
+            // SPEED BUMP
+            if (mode == DRIVING_MODE.SPEED_BUMP)
+            {
+                // Debug.Log(acceleratorInput + " " + brakeInput + " acc: " + acceleration.z + " m/s  vel: " + currentVelocity.z * 3.6 + " km/h" );
+
+                //acceleratorInput = 0.4f;
+                acceleratorInput = speedBumpAcc;
+
+                if (!passedSB && rb.transform.position.z + 25 >= speedBump.transform.position.z)
+                {
+                    acceleratorInput = 0;
+                    // brakeInput = speedBumpBrake;
+                }
+
+                if (rb.transform.position.z >= speedBump.transform.position.z + 3)
+                {
+                    passedSB = true;
+                    // brakeInput = 0;
+                }
+
+                //if(passedSB && !passedSB1) acceleratorInput += 0.2f;
+
+                if (!passedSB1 && rb.transform.position.z + 25 >= speedBump1.transform.position.z)
+                {
+                    acceleratorInput = 0;
+                    // acceleratorInput -= 0.2f;
+                    // brakeInput = speedBumpBrake;
+                }
+
+
+                if (rb.transform.position.z > speedBump1.transform.position.z + 10)
+                {
+                    acceleratorInput = 0;
+                    isBraking = true;
+                    brakeInput = speedBumpBrake;
+                }
+                Debug.Log("acc: " + acceleratorInput);
+            }
+
+
+            // CURVE
+            if (mode == DRIVING_MODE.CURVE)
+            {
+
+                float decPos = 0;
+                acceleratorInput = 0.8f;
+
+                //TODO: POR OUTRA VEZ
+                if (rb.velocity.z * 3.6 > 35 && !decelerating)
+                {
+                    // Debug.Log("ai " + acceleratorInput + " || decPos " + decPos + " || pos " + rb.transform.position + " || dec " + decelerating );
+                    acceleratorInput = 0.5f;
+                    decelerating = true;
+                    decPos = rb.transform.position.z;
+                }
+
+                if (decelerating && rb.transform.position.z >= decPos + 10)
+                {
+                    if (Math.Abs(rb.transform.rotation.eulerAngles.y) >= 75) steerInput = 0;
+                    else steerInput = 1;
+                    if (rb.transform.position.x > 60) isBraking = true;
+                }
             }
         }
-
-        // REVERSE
-        if (mode == DRIVING_MODE.REVERSE)
-        {
-            reverse = true;
-            acceleratorInput = 1;
-            if (rb.transform.position.z < -hardcodedStoppingPoint / 3)
-            {
-                acceleratorInput = 0;
-                isBraking = true;
-            }
-        }
-
-        // SPEED BUMP
-        if (mode == DRIVING_MODE.SPEED_BUMP)
-        {
-            // Debug.Log(acceleratorInput + " " + brakeInput + " acc: " + acceleration.z + " m/s  vel: " + currentVelocity.z * 3.6 + " km/h" );
-
-            //acceleratorInput = 0.4f;
-            acceleratorInput = speedBumpAcc;
-
-            if (!passedSB && rb.transform.position.z + 25 >= speedBump.transform.position.z)
-            {
-                acceleratorInput = 0;
-                // brakeInput = speedBumpBrake;
-            }
-
-            if (rb.transform.position.z >= speedBump.transform.position.z + 3)
-            {
-                passedSB = true;
-                // brakeInput = 0;
-            }
-
-            //if(passedSB && !passedSB1) acceleratorInput += 0.2f;
-
-            if (!passedSB1 && rb.transform.position.z + 25 >= speedBump1.transform.position.z)
-            {
-                acceleratorInput = 0;
-                // acceleratorInput -= 0.2f;
-                // brakeInput = speedBumpBrake;
-            }
-
-
-            if (rb.transform.position.z > speedBump1.transform.position.z + 10)
-            {
-                acceleratorInput = 0;
-                isBraking = true;
-                brakeInput = speedBumpBrake;
-            }
-            Debug.Log("acc: " + acceleratorInput);
-        }
-
-
-        // CURVE
-        if (mode == DRIVING_MODE.CURVE)
-        {
-
-            float decPos = 0;
-            acceleratorInput = 0.8f;
-
-            //TODO: POR OUTRA VEZ
-            if (rb.velocity.z * 3.6 > 35 && !decelerating)
-            {
-                // Debug.Log("ai " + acceleratorInput + " || decPos " + decPos + " || pos " + rb.transform.position + " || dec " + decelerating );
-                acceleratorInput = 0.5f;
-                decelerating = true;
-                decPos = rb.transform.position.z;
-            }
-
-            if (decelerating && rb.transform.position.z >= decPos + 10)
-            {
-                if (Math.Abs(rb.transform.rotation.eulerAngles.y) >= 75) steerInput = 0;
-                else steerInput = 1;
-                if (rb.transform.position.x > 60) isBraking = true;
-            }
-        } */
     }
 
     private void HandleMotor()
@@ -438,6 +415,4 @@ public class VehicleController : MonoBehaviour
     {
         return steerInput;
     }
-
-
 }

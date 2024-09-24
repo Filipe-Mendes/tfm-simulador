@@ -71,9 +71,9 @@ z3 = plot(position(:,t),input(:,4)); LZ3 = "Steer Input";
 hold off
 legend([z1,z2,z3], [LZ1, LZ2, LZ3]);
 xlabel('Time')
-ylabel('Z value')
+ylabel('Input')
 ylim([-1.5 1.5])
-title('Z value / Time')
+title('Input / Time')
 
 %% Torque
 % figure('name','Torque');
