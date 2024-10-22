@@ -24,7 +24,7 @@ public class VehicleController : MonoBehaviour
     // Testing variables
     // [SerializeField] private float speedBumpAcc = 0.4f;
     [SerializeField] private float speedBumpAcc = 1;
-    [SerializeField] private float speedBumpBrake = 0.5f;
+    [SerializeField] private float speedBumpBrake = 1;
     private DRIVING_MODE mode;
 
 
@@ -296,12 +296,18 @@ public class VehicleController : MonoBehaviour
                     // brakeInput = speedBumpBrake;
                 }
 
+                if (rb.transform.position.z >= speedBump1.transform.position.z + 3)
+                {
+                    passedSB1 = true;
+                    // brakeInput = 0;
+                }
 
-                if (rb.transform.position.z > speedBump1.transform.position.z + 10)
+                if (passedSB1 && rb.transform.position.z > speedBump1.transform.position.z + 10)
                 {
                     acceleratorInput = 0;
                     isBraking = true;
                     brakeInput = speedBumpBrake;
+                    smoothedBrakeInput = brakeInput;
                 }
                 Debug.Log("acc: " + acceleratorInput);
             }

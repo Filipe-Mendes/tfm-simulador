@@ -24967,7 +24967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vrCamera: {fileID: 1070869498}
   speedBumpAcc: 1
-  speedBumpBrake: 0.2
+  speedBumpBrake: 1
   speedBump: {fileID: 404487932}
   speedBump1: {fileID: 110290743}
   hardcodedStoppingPoint: 25
@@ -39723,7 +39723,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1842416296
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -43356,7 +43356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1988913240
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -49,7 +49,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
             }
 
             // Debug.Log("steering wheel activate");
-            // steeringWheel.SetActive(true);
+            steeringWheel.SetActive(true);
         }
         Debug.Log("Steeing wheel calibrator start end");
     }
