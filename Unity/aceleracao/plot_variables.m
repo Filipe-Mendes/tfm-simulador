@@ -31,7 +31,7 @@ x2 = plot(position(:,t),velocity(:,x)); LX2 = "Velocity.x";
 x3 = plot(position(:,t),acceleration(:,x)); LX3 = "Acceleration.x";
 hold off
 legend([x1,x2,x3], [LX1, LX2, LX3]);
-xlabel('Time')
+xlabel('Time (ms)')
 ylabel('X value')
 ylim([min_y max_y])
 title('X value / Time')
@@ -44,7 +44,7 @@ y2 = plot(position(:,t),velocity(:,y)); LY2 = "Velocity.y";
 y3 = plot(position(:,t),acceleration(:,y)); LY3 = "Acceleration.y";
 hold off
 legend([y1,y2,y3], [LY1, LY2, LY3]);
-xlabel('Time')
+xlabel('Time (ms)')
 ylabel('Y value')
 ylim([min_y max_y])
 title('Y value / Time')
@@ -57,7 +57,7 @@ z2 = plot(position(:,t),velocity(:,z)); LZ2 = "Velocity.z";
 z3 = plot(position(:,t),acceleration(:,z)); LZ3 = "Acceleration.z";
 hold off
 legend([z1,z2,z3], [LZ1, LZ2, LZ3]);
-xlabel('Time')
+xlabel('Time (ms)')
 ylabel('Z value')
 ylim([min_y max_y])
 title('Z value / Time')
@@ -70,7 +70,7 @@ z2 = plot(position(:,t),input(:,3)); LZ2 = "Brake Input";
 z3 = plot(position(:,t),input(:,4)); LZ3 = "Steer Input";
 hold off
 legend([z1,z2,z3], [LZ1, LZ2, LZ3]);
-xlabel('Time')
+xlabel('Time (ms)')
 ylabel('Input')
 ylim([-1.5 1.5])
 title('Input / Time')

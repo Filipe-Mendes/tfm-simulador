@@ -59,6 +59,7 @@ public class VehicleController : MonoBehaviour
     private const string ACCELERATOR = "Accelerator";
     private const string BRAKE = "Brake";
     private bool isBraking;
+    private bool turned = false;
     private bool reverse = false;
 
     private float currentSteerAngle;
@@ -318,22 +319,27 @@ public class VehicleController : MonoBehaviour
             {
 
                 float decPos = 0;
-                acceleratorInput = 0.8f;
+                if (decelerating) acceleratorInput = 0;
+                else acceleratorInput = 0.8f;
 
-                //TODO: POR OUTRA VEZ
-                if (rb.velocity.z * 3.6 > 35 && !decelerating)
+                if (rb.velocity.z * 3.6 > 10 && !decelerating) // INITIAL ACCELERATION
                 {
                     // Debug.Log("ai " + acceleratorInput + " || decPos " + decPos + " || pos " + rb.transform.position + " || dec " + decelerating );
-                    acceleratorInput = 0.5f;
+                    acceleratorInput = 0;
                     decelerating = true;
-                    decPos = rb.transform.position.z;
+                    decPos = rb.transform.position.z;   // POSITION WHERE THE VEHICLE STOPPED ACCELERATING
                 }
 
-                if (decelerating && rb.transform.position.z >= decPos + 10)
+                if (decelerating && rb.transform.position.z >= decPos + 20)     // VEHICLE STARTS TURNING 20M AFTER DECPOS
                 {
-                    if (Math.Abs(rb.transform.rotation.eulerAngles.y) >= 75) steerInput = 0;
-                    else steerInput = 1;
-                    if (rb.transform.position.x > 60) isBraking = true;
+                    if (Math.Abs(rb.transform.rotation.eulerAngles.y) >= 80)
+                    {
+                        turned = true;
+                        steerInput = 0;
+                    }
+                    if(!turned) steerInput = 0.1f;
+
+                    if (rb.transform.position.x > 50) isBraking = true;
                 }
             }
         }
