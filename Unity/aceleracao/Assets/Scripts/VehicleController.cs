@@ -10,15 +10,27 @@ using System.Text;
 using UnityEngine.InputSystem;
 using UnityEngine.Assertions;
 using System.Threading;
+using System.Collections;
+using UnityEngine.XR.Hands;
+using UnityEngine.XR;
 
 
 public class VehicleController : MonoBehaviour
 {
+
+    [SerializeField] private GameObject calibratorGO;
+    private SteeringWheelCalibrator calibrator;
+
+
+
     private bool ready = false;
 
-    // [SerializeField] private GameObject driverPosition;
-    [SerializeField] private Camera vrCamera;
+    [SerializeField] private MODE smode;
+    [SerializeField] private GameObject driverPosition;
 
+    [SerializeField] private GameObject vrRig;
+
+    // [SerializeField] private Camera vrCamera;
     // Testing variables
     // [SerializeField] private float speedBumpAcc = 0.4f;
     [SerializeField] private float speedBumpAcc = 1;
@@ -111,10 +123,15 @@ public class VehicleController : MonoBehaviour
 
 
         rb.sleepThreshold = 0.0f;
+        InputTracking.disablePositionalTracking = true;
 
         // timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        // UpdateVRView();
+        calibrator = calibratorGO.GetComponent<SteeringWheelCalibrator>();
 
     }
+
+    private Vector3 distanceVR;
 
     public void SetUpVehicle(DRIVING_MODE dm, INPUT_DEVICE ind)
     {
@@ -134,17 +151,19 @@ public class VehicleController : MonoBehaviour
 
         ready = true;
         timeStart = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        // distanceVR = transform.position - vrRig.transform.position;
     }
 
-    /*     private void UpdateDriverPosition()
-        {
+    /*  private void UpdateDriverPosition()
+     {
 
-            float rotationAngleY = resetPos.rotation.eulerAngles.y - driverPosition.transform.rotation.eulerAngles.y;
-            driverPosition.transform.Rotate(0, rotationAngleY, 0);
+         float rotationAngleY = resetPos.rotation.eulerAngles.y - driverPosition.transform.rotation.eulerAngles.y;
+         driverPosition.transform.Rotate(0, rotationAngleY, 0);
 
-            Vector3 distance = resetPos.position - vrCamera.transform.position;
-            driverPosition.transform.position += distance;
-        } */
+         Vector3 distance = resetPos.position - vrCamera.transform.position;
+         driverPosition.transform.position += distance;
+     } */
 
     private void FixedUpdate()
     {
@@ -162,6 +181,8 @@ public class VehicleController : MonoBehaviour
 
         if (ready)
         {
+            if (calibrator.IsCalibrated()) UpdateVRView();
+
             if (mode != DRIVING_MODE.FREE) PerformTestScenario();
             else HandleInput();
 
@@ -170,6 +191,8 @@ public class VehicleController : MonoBehaviour
             UpdateWheels();
         }
     }
+
+
 
     // private float accIn = 0;
     // private float brIn = 0;
@@ -208,6 +231,15 @@ public class VehicleController : MonoBehaviour
         }
     }
 
+    public void UpdateVRView()
+    {
+        vrRig.transform.SetParent(transform);
+        // InputTracking.disablePositionalTracking = true;
+        // Vector3 newPos = transform.position + new Vector3(0, 0.6176f, 0.01f);
+        // vrRig.transform.position = newPos;
+        //vrRig.transform.position = transform.position;// + distanceVR;
+        //vrRig.transform.rotation = transform.rotation;
+    }
 
     public void PerformTestScenario()
     {
@@ -334,7 +366,7 @@ public class VehicleController : MonoBehaviour
                         turned = true;
                         steerInput = 0;
                     }
-                    if(!turned) steerInput = 0.1f;
+                    if (!turned) steerInput = 0.1f;
 
                     if (rb.transform.position.x > 50) isBraking = true;
                 }

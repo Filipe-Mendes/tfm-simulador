@@ -36,7 +36,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Steeing wheel calibrator start start");
+        Debug.Log("Steering wheel calibrator start start");
         if (toCalibrate)
         {
             canvas.SetActive(true);
@@ -160,7 +160,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
                     Vector3 steeringWheelCenter = lpp;
                     Debug.Log("c: " + steeringWheelCenter);
 
-                    steeringWheel.transform.position = steeringWheelCenter;
+                    steeringWheel.transform.position = steeringWheelCenter + new Vector3(0,1.1176f,0);
                     // 2511  + new Vector3(0, cameraOffset.position.y, 0); //TODO: CHANGE TO CAMERA OFFSET https://docs.unity3d.com/Packages/com.unity.xr.hands@1.3/api/UnityEngine.XR.Hands.XRHandDevice.html
 
                     //2511
@@ -442,14 +442,20 @@ public class SteeringWheelCalibrator : MonoBehaviour
                         // LP / RP -> POSES OF THE INDEX FINGERS                    
                         if (lpb && rpb) Debug.Log("!! lp: " + lp.position + " || rp: " + rp.position);
                     
+                        Pose llp = lp.GetTransformedBy(xrOriginPose);
+                        Pose rrp = rp.GetTransformedBy(xrOriginPose);
 
+                        if (lpb && rpb) Debug.Log("!! lrp: " + llp.position + " || rrp: " + rrp.position);
 
+                        clp.transform.position = llp.position;
+                        crp.transform.position = rrp.position;
+                        head.transform.position = XROrigin.position;
 
                         // LEFT FINGER POINTS TO THE CENTER OF THE STEERING WHEEL, REPOSITION SW
                         //Vector3 steeringWheelCenter = lp.position;
                     }
 
-                    Vector3 steeringWheelCenter = clp.transform.position;
+                    Vector3 steeringWheelCenter = clp.transform.position + new Vector3(0,1.1176f,0);;
                     
                     
                     Debug.Log("c: " + steeringWheelCenter);

@@ -73,17 +73,21 @@ public class Manager : MonoBehaviour
                 mainCamera.SetActive(true);
                 sideCamera.SetActive(true);
                 vrRig.SetActive(false);
+                handsVisualizer.SetActive(false);
                 break;
             case MODE.VR:
                 mainCamera.SetActive(false);
                 sideCamera.SetActive(false);
                 vrRig.SetActive(true);
+                handsVisualizer.SetActive(true);
+                vrRig.transform.SetParent(vehicleControllerObject.transform); //TODO: CHECK
+
                 break;
         }
 
         // Driving Mode
         vehicleController = vehicleControllerObject.GetComponent<VehicleController>();
-        if(drivingMode != DRIVING_MODE.FREE) handsVisualizer.SetActive(false);
+        // if(drivingMode != DRIVING_MODE.FREE) handsVisualizer.SetActive(false);
 
         // Activate objects like speed bumps etc
         if(drivingMode == DRIVING_MODE.FREE){
