@@ -7,9 +7,12 @@ using UnityEngine.XR.Hands;
 public class SteeringWheelCalibrator : MonoBehaviour
 {
 
-/*     [SerializeField] private Transform pointA;
-    [SerializeField] private Transform pointB; */
+    /*     [SerializeField] private Transform pointA;
+        [SerializeField] private Transform pointB; */
     [SerializeField] private bool mockCalibration = false;
+    [SerializeField] private GameObject clp;
+    [SerializeField] private GameObject crp;
+    [SerializeField] private GameObject head;
 
     [SerializeField] private GameObject canvas;
     [SerializeField] private TMPro.TMP_Text timerText;
@@ -20,7 +23,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
     [SerializeField] private GameObject vehicle;
     [SerializeField] private GameObject steeringWheel;
     [SerializeField] private int steeringWheelAngle = 45;
-    [SerializeField] private float timeToCalibrate = 10000; //ms
+    [SerializeField] private float timeToCalibrate = 10; //s
     private bool calibrated = false;
     [HideInInspector] public bool toCalibrate = false;
 
@@ -32,17 +35,19 @@ public class SteeringWheelCalibrator : MonoBehaviour
     private bool running = false;
 
     void Start()
-    {   
+    {
         Debug.Log("Steeing wheel calibrator start start");
-        if(toCalibrate) {
+        if (toCalibrate)
+        {
             canvas.SetActive(true);
-            
-            if(!mockCalibration){
+
+            if (!mockCalibration)
+            {
                 var handSubsystems = new List<XRHandSubsystem>();
                 SubsystemManager.GetSubsystems(handSubsystems);
 
                 for (var i = 0; i < handSubsystems.Count; ++i)
-                {   
+                {
                     var handSubsystem = handSubsystems[i];
                     temp_m_HandSubsystem = handSubsystem;
                 }
@@ -54,51 +59,57 @@ public class SteeringWheelCalibrator : MonoBehaviour
         Debug.Log("Steeing wheel calibrator start end");
     }
 
-/*
-    void FixedUpdate_mocktest()
-    {   
+    /*
+        void FixedUpdate_mocktest()
+        {   
 
-        while (!calibrated){
-            if( timeToCalibrate >= 0 ){
-                timeToCalibrate -= Time.deltaTime;
-                Debug.Log("time remaining: " + timeToCalibrate);
-                timerText.text = ""+(int)Math.Ceiling(timeToCalibrate);
-                break;
-            } else {
-                canvas.SetActive(false);
+            while (!calibrated){
+                if( timeToCalibrate >= 0 ){
+                    timeToCalibrate -= Time.deltaTime;
+                    Debug.Log("time remaining: " + timeToCalibrate);
+                    timerText.text = ""+(int)Math.Ceiling(timeToCalibrate);
+                    break;
+                } else {
+                    canvas.SetActive(false);
 
-                calibrated = true;
+                    calibrated = true;
+                }
             }
+
         }
-        
-    }
-*/
+    */
     //TODO: CLEANUP
     void FixedUpdateOld()
-    {   
+    {
         if (toCalibrate && !running && temp_m_HandSubsystem.running)
         {
-            if(!mockCalibration){
+            if (!mockCalibration)
+            {
                 m_HandSubsystem = temp_m_HandSubsystem;
                 Debug.Log("Running Hand System");
             }
             running = true;
         }
 
-        if(running){
-            while (!calibrated){
-                if( timeToCalibrate >= 0 ){
-                    timeToCalibrate -= Time.deltaTime;
+        if (running)
+        {
+            while (!calibrated)
+            {
+                if (timeToCalibrate >= 0)
+                {
+                    timeToCalibrate -= Time.deltaTime; // deltaTime is in seconds
                     Debug.Log("time remaining: " + timeToCalibrate);
-                    timerText.text = ""+(int)Math.Ceiling(timeToCalibrate);
+                    timerText.text = "" + (int)Math.Ceiling(timeToCalibrate);
                     // break;
-                } else {
+                }
+                else
+                {
                     canvas.SetActive(false);
-                    
+
                     // Timer ended, calibrate wheel
                     leftHand = m_HandSubsystem.leftHand;
                     rightHand = m_HandSubsystem.rightHand;
-                    
+
                     Debug.Log("lh: " + leftHand);
                     Debug.Log("rh: " + rightHand);
 
@@ -112,15 +123,15 @@ public class SteeringWheelCalibrator : MonoBehaviour
 
                     bool lpb = lj.TryGetPose(out lp);
                     bool rpb = rj.TryGetPose(out rp);
-                    
-                    if(lpb && rpb) Debug.Log("!! lp: " + lp.position + " || rp: " + rp.position);
+
+                    if (lpb && rpb) Debug.Log("!! lp: " + lp.position + " || rp: " + rp.position);
 
 
                     /////////// 25 11
                     Vector3 lpp = transform.TransformPoint(lp.position);
                     Vector3 rpp = transform.TransformPoint(rp.position);
 
-                    if(lpb && rpb) Debug.Log("! lpp: " + lpp + " || rpp: " + rpp);
+                    if (lpb && rpb) Debug.Log("! lpp: " + lpp + " || rpp: " + rpp);
 
                     //lp = lp.GetTransformedBy(xrOriginPose);
                     //rp = rp.GetTransformedBy(xrOriginPose);
@@ -143,7 +154,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
 
                     Debug.Log("ls: " + steeringWheel.transform.localScale); */
                     //////////////////////////////////////
-                    
+
                     // Vector3 steeringWheelCenter = lp.position;
                     //2511
                     Vector3 steeringWheelCenter = lpp;
@@ -175,10 +186,10 @@ public class SteeringWheelCalibrator : MonoBehaviour
                     // the second argument, upwards, defaults to Vector3.up
                     // 2511 Quaternion rotation = Quaternion.LookRotation(relativePos, new Vector3(1,0,0));
                     // 2511 Debug.Log("rotation: " + rotation);
-                /*  Quaternion tiltRotation = Quaternion.Euler(45, 0, 0);
-                    Debug.Log("tilt: " + tiltRotation);
-                    steeringWheel.transform.rotation = rotation * tiltRotation;
-                    Debug.Log("ROT * tilt: " + rotation * tiltRotation); */
+                    /*  Quaternion tiltRotation = Quaternion.Euler(45, 0, 0);
+                        Debug.Log("tilt: " + tiltRotation);
+                        steeringWheel.transform.rotation = rotation * tiltRotation;
+                        Debug.Log("ROT * tilt: " + rotation * tiltRotation); */
                     //2511 steeringWheel.transform.rotation = rotation;
 
                     var rot = steeringWheel.transform.localRotation.eulerAngles;
@@ -196,7 +207,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
                     /* var lookPos = mainCamera.position - steeringWheel.transform.position;
                     lookPos.y = 0;
                     var rotation = Quaternion.LookRotation(lookPos);
-                    steeringWheel.transform.rotation = Quaternion.Slerp(steeringWheel.transform.rotation, rotation, 0); */ 
+                    steeringWheel.transform.rotation = Quaternion.Slerp(steeringWheel.transform.rotation, rotation, 0); */
                     // steeringWheel.transform.rotation = new Vector3(steeringWheel.transform.rotation.x, 180, 45);
 
                     //modifying the Vector3, based on input multiplied by speed and time
@@ -220,62 +231,100 @@ public class SteeringWheelCalibrator : MonoBehaviour
         }
     }
 
-        void FixedUpdate()
-    {   
-        if (toCalibrate && !running && temp_m_HandSubsystem.running)
+    void FixedUpdate8()
+    {
+        if (!mockCalibration && toCalibrate && !running && temp_m_HandSubsystem.running)
         {
-            if(!mockCalibration){
+            if (!mockCalibration)
+            {
                 m_HandSubsystem = temp_m_HandSubsystem;
                 Debug.Log("Running Hand System");
             }
             running = true;
+        } else {
+            running = true;
         }
 
-        if(running){
-            while (!calibrated){
-                if( timeToCalibrate >= 0 ){
-                    timeToCalibrate -= Time.deltaTime;
+        if (running)
+        {
+            while (!calibrated)
+            {
+                if (timeToCalibrate >= 0)
+                {
+                    timeToCalibrate -= Time.deltaTime; // deltaTime is in seconds
                     Debug.Log("time remaining: " + timeToCalibrate);
-                    timerText.text = ""+(int)Math.Ceiling(timeToCalibrate);
+                    timerText.text = "" + (int)Math.Ceiling(timeToCalibrate);
                     break;
-                } else {
+                }
+                else
+                {
                     canvas.SetActive(false);
+
+                    if(!mockCalibration){
+
+                        // Timer ended, calibrate wheel
+                        leftHand = m_HandSubsystem.leftHand;
+                        rightHand = m_HandSubsystem.rightHand;
+
+                        XRHandJoint lj = leftHand.GetJoint(XRHandJointID.IndexTip);
+                        XRHandJoint rj = rightHand.GetJoint(XRHandJointID.IndexTip);
+
+                        // TO REPLACE NULL
+                        Pose xrOriginPose = new Pose(XROrigin.position, XROrigin.rotation);
+                        Pose lp = xrOriginPose;
+                        Pose rp = xrOriginPose;
+
+                        bool lpb = lj.TryGetPose(out lp);
+                        bool rpb = rj.TryGetPose(out rp);
+
+                        // LP / RP -> POSES OF THE INDEX FINGERS                    
+                        if (lpb && rpb) Debug.Log("!! lp: " + lp.position + " || rp: " + rp.position);
                     
-                    // Timer ended, calibrate wheel
-                    leftHand = m_HandSubsystem.leftHand;
-                    rightHand = m_HandSubsystem.rightHand;
+
+
+                        // TRANSFORMED INTO WORLD SPACE
+                        // c2611
+                        // lp = lp.GetTransformedBy(xrOriginPose);
+                        // rp = rp.GetTransformedBy(xrOriginPose);
+                        // if (lpb && rpb) Debug.Log("! lp: " + lp + " || rp: " + rp);
+
+
+                        // LEFT FINGER POINTS TO THE CENTER OF THE STEERING WHEEL, REPOSITION SW
+                        //Vector3 steeringWheelCenter = lp.position;
+                    }
+
+                    Vector3 steeringWheelCenter = clp.transform.position;
                     
-                    XRHandJoint lj = leftHand.GetJoint(XRHandJointID.IndexTip);
-                    XRHandJoint rj = rightHand.GetJoint(XRHandJointID.IndexTip);
-
-                    // TO REPLACE NULL
-                    Pose xrOriginPose = new Pose(XROrigin.position, XROrigin.rotation); 
-                    Pose lp = xrOriginPose;
-                    Pose rp = xrOriginPose;
-
-                    bool lpb = lj.TryGetPose(out lp);
-                    bool rpb = rj.TryGetPose(out rp);
-
-                    // LP / RP -> POSES OF THE INDEX FINGERS                    
-                    if(lpb && rpb) Debug.Log("!! lp: " + lp.position + " || rp: " + rp.position);
-
-                    // TRANSFORMED INTO WORLD SPACE
-                    lp = lp.GetTransformedBy(xrOriginPose);
-                    rp = rp.GetTransformedBy(xrOriginPose);
-
-                    if(lpb && rpb) Debug.Log("! lp: " + lp + " || rp: " + rp);
-
-                    // LEFT FINGER POINTS TO THE CENTER OF THE STEERING WHEEL, REPOSITION SW
-                    Vector3 steeringWheelCenter = lp.position;
+                    
                     Debug.Log("c: " + steeringWheelCenter);
                     steeringWheel.transform.position = steeringWheelCenter;
 
                     // THE RADIUS OF THE SW IS GIVEN BY THE DISTANCE BETWEEN THE LEFT AND RIGHT FINGER
-                    float radius = Vector3.Distance(lp.position, rp.position);
+                    // c26 float radius = Vector3.Distance(lp.position, rp.position);
+                    float radius = Vector3.Distance(clp.transform.position, crp.transform.position);
                     Debug.Log("r: " + radius);
 
                     // SCALE THE SW ACCORDING TO THE RADIUS
                     NewScale(steeringWheel, radius * 2);
+
+                    Vector3 directionToHead = head.transform.position - clp.transform.position;
+
+                    // Flatten the direction vector onto the XZ-plane
+                    directionToHead.y = 0;
+
+                    // Calculate the Y-axis rotation to face the head
+                    Quaternion tiltRotation = Quaternion.Euler(0, 0, 45);
+                    Quaternion lookAtHead = Quaternion.LookRotation(directionToHead);
+
+                    // Combine the rotation with the desired Z-axis tilt (e.g., 45 degrees)
+                    Quaternion finalRotation = lookAtHead * tiltRotation; //* Quaternion.Euler(0, 90, 0);;
+                    finalRotation.eulerAngles = new Vector3(finalRotation.eulerAngles.x, 90, finalRotation.eulerAngles.z);
+
+                    // Apply the rotation to the disk
+                    // disk.transform.position = lf; // Set the position
+                    // disk.transform.localScale = new Vector3(radius * 2, disk.transform.localScale.y, radius * 2); // Scale the disk
+                    steeringWheel.transform.rotation = finalRotation;
+
 
 
                     // 2511  + new Vector3(0, cameraOffset.position.y, 0); //TODO: CHANGE TO CAMERA OFFSET https://docs.unity3d.com/Packages/com.unity.xr.hands@1.3/api/UnityEngine.XR.Hands.XRHandDevice.html
@@ -292,10 +341,10 @@ public class SteeringWheelCalibrator : MonoBehaviour
                     // the second argument, upwards, defaults to Vector3.up
                     // 2511 Quaternion rotation = Quaternion.LookRotation(relativePos, new Vector3(1,0,0));
                     // 2511 Debug.Log("rotation: " + rotation);
-                /*  Quaternion tiltRotation = Quaternion.Euler(45, 0, 0);
-                    Debug.Log("tilt: " + tiltRotation);
-                    steeringWheel.transform.rotation = rotation * tiltRotation;
-                    Debug.Log("ROT * tilt: " + rotation * tiltRotation); */
+                    /*  Quaternion tiltRotation = Quaternion.Euler(45, 0, 0);
+                        Debug.Log("tilt: " + tiltRotation);
+                        steeringWheel.transform.rotation = rotation * tiltRotation;
+                        Debug.Log("ROT * tilt: " + rotation * tiltRotation); */
                     //2511 steeringWheel.transform.rotation = rotation;
 
 
@@ -318,7 +367,7 @@ public class SteeringWheelCalibrator : MonoBehaviour
                     /* var lookPos = mainCamera.position - steeringWheel.transform.position;
                     lookPos.y = 0;
                     var rotation = Quaternion.LookRotation(lookPos);
-                    steeringWheel.transform.rotation = Quaternion.Slerp(steeringWheel.transform.rotation, rotation, 0); */ 
+                    steeringWheel.transform.rotation = Quaternion.Slerp(steeringWheel.transform.rotation, rotation, 0); */
                     // steeringWheel.transform.rotation = new Vector3(steeringWheel.transform.rotation.x, 180, 45);
 
                     //modifying the Vector3, based on input multiplied by speed and time
@@ -336,19 +385,114 @@ public class SteeringWheelCalibrator : MonoBehaviour
 
 
 
-                    // steeringWheel.transform.SetParent(vehicle.transform);
+                    steeringWheel.transform.SetParent(vehicle.transform);
                     // Debug.Log("calibrated " + steeringWheelCenter);
-                    // calibrated = true;
+                    calibrated = true;
                 }
             }
         }
     }
 
-    public bool IsCalibrated(){
+    void FixedUpdate()
+    {
+        if (!mockCalibration && toCalibrate && !running && temp_m_HandSubsystem.running)
+        {
+            if (!mockCalibration)
+            {
+                m_HandSubsystem = temp_m_HandSubsystem;
+                Debug.Log("Running Hand System");
+            }
+            running = true;
+        } else {
+            running = true;
+        }
+
+        if (running)
+        {
+            while (!calibrated)
+            {
+                if (timeToCalibrate >= 0)
+                {
+                    timeToCalibrate -= Time.deltaTime; // deltaTime is in seconds
+                    Debug.Log("time remaining: " + timeToCalibrate);
+                    timerText.text = "" + (int)Math.Ceiling(timeToCalibrate);
+                    break;
+                }
+                else
+                {
+                    canvas.SetActive(false);
+
+                    if(!mockCalibration){
+
+                        // Timer ended, calibrate wheel
+                        leftHand = m_HandSubsystem.leftHand;
+                        rightHand = m_HandSubsystem.rightHand;
+
+                        XRHandJoint lj = leftHand.GetJoint(XRHandJointID.IndexTip);
+                        XRHandJoint rj = rightHand.GetJoint(XRHandJointID.IndexTip);
+
+                        // TO REPLACE NULL
+                        Pose xrOriginPose = new Pose(XROrigin.position, XROrigin.rotation);
+                        Pose lp = xrOriginPose;
+                        Pose rp = xrOriginPose;
+
+                        bool lpb = lj.TryGetPose(out lp);
+                        bool rpb = rj.TryGetPose(out rp);
+
+                        // LP / RP -> POSES OF THE INDEX FINGERS                    
+                        if (lpb && rpb) Debug.Log("!! lp: " + lp.position + " || rp: " + rp.position);
+                    
+
+
+
+                        // LEFT FINGER POINTS TO THE CENTER OF THE STEERING WHEEL, REPOSITION SW
+                        //Vector3 steeringWheelCenter = lp.position;
+                    }
+
+                    Vector3 steeringWheelCenter = clp.transform.position;
+                    
+                    
+                    Debug.Log("c: " + steeringWheelCenter);
+                    steeringWheel.transform.position = steeringWheelCenter;
+
+                    // THE RADIUS OF THE SW IS GIVEN BY THE DISTANCE BETWEEN THE LEFT AND RIGHT FINGER
+                    // c26 float radius = Vector3.Distance(lp.position, rp.position);
+                    float radius = Vector3.Distance(clp.transform.position, crp.transform.position);
+                    Debug.Log("r: " + radius);
+
+                    // SCALE THE SW ACCORDING TO THE RADIUS
+                    NewScale(steeringWheel, radius * 2);
+
+                    Vector3 directionToHead = head.transform.position - clp.transform.position;
+
+                    // Flatten the direction vector onto the XZ-plane
+                    directionToHead.y = 0;
+
+                    // Calculate the Y-axis rotation to face the head
+                    Quaternion tiltRotation = Quaternion.Euler(0, 0, 45);
+                    Quaternion lookAtHead = Quaternion.LookRotation(directionToHead);
+
+                    // Combine the rotation with the desired Z-axis tilt (e.g., 45 degrees)
+                    Quaternion finalRotation = lookAtHead * tiltRotation; //* Quaternion.Euler(0, 90, 0);;
+                    finalRotation.eulerAngles = new Vector3(finalRotation.eulerAngles.x, 90, finalRotation.eulerAngles.z);
+
+                    steeringWheel.transform.rotation = finalRotation;
+
+
+                    steeringWheel.transform.SetParent(vehicle.transform);
+                    calibrated = true;
+                }
+            }
+        }
+    }
+
+    public bool IsCalibrated()
+    {
         return calibrated;
     }
 
-    public void NewScale(GameObject theGameObject, float newSize) {
+    public void NewScale(GameObject theGameObject, float newSize)
+    {
 
         float sizey = theGameObject.GetComponent<Renderer>().bounds.size.y;
         float sizez = theGameObject.GetComponent<Renderer>().bounds.size.z;

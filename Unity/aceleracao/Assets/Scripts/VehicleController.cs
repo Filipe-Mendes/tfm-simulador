@@ -14,8 +14,6 @@ using System.Threading;
 
 public class VehicleController : MonoBehaviour
 {
-
-
     private bool ready = false;
 
     // [SerializeField] private GameObject driverPosition;
@@ -150,7 +148,6 @@ public class VehicleController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         // Restart the scene
         if (restartAction.ReadValue<float>() == 1)
         {
